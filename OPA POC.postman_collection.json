@@ -19,7 +19,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_create\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_create\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -55,7 +55,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"alice\",\r\n    \"action\": \"nomination_view\", // Alice is an inspector, who by default only get 'nomination_view' and 'ticket_view', but her subscriber (KMO) only has ticket permissions, thus only 'ticket_view' works for Alice. \r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"P66\"],\r\n        \"companyParties\": [\"shipper\"],\r\n        \"subscriber\": \"KMO\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"alice\",\r\n    \"action\": \"nomination_view\", // Alice is an inspector, who by default only gets 'nomination_view' and 'ticket_view', but her subscriber (KMO) only has ticket permissions, thus only 'ticket_view' works for Alice. \r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"P66\", \"P66\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"KMO\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -86,7 +86,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"admin_add_application\", // This action is not granted to any subscribers\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"admin_add_application\", // This action is not granted to any subscribers\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -122,7 +122,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_subscriber_confirm\", // This action requires the pss right 'pss_nomination-subscriber-confirm' which 'bob' does not have\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"carrier\"],\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_subscriber_confirm\", // This action requires the pss right 'pss_nomination_subscriber_confirm' which 'bob' does not have\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"carrier\", \"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -152,13 +152,13 @@
 					"name": "Company Party",
 					"item": [
 						{
-							"name": "Denied - Missing Company Party For Action",
+							"name": "Denied - Shipper Party Required By Action Not Inherited By Principal",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_edit\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"supCon\", \"tankage\"], // this action 'nomination_edit' requires 'shipper' party to be present\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_edit\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"supCon\", \"shipper\", \"tankage\"], // this action 'nomination_edit' requires 'shipper' party to be inherited but 'bob' does NOT have permissions for 'CHV'\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -183,13 +183,75 @@
 							"response": []
 						},
 						{
-							"name": "Allowed - Action Does Not Require A Company Party",
+							"name": "Denied - Tankage Party Required By Action Not Inherited By Principal",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_view\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"\"], // this action 'nomination_view' does NOT require a party to be present\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_tankage_confirm\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"EXN\", \"PHI\"],\r\n        \"companyParties\": [\"supCon\", \"shipper\", \"tankage\"], // this action 'nomination_tankage_confirm' requires 'tankage' party to be inherited but 'bob' does NOT have permissions for 'PHI'\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:5000/api/nominations",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"nominations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Denied - Action Does Not Require A Company Party But No Companies Are Inherited",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_view\", // this action 'nomination_view' does NOT require a specific party to be inherited, but no companies requested below are inheritied.\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"PHI\", \"CHV\", \"MOB\"], // 'bob' only inherits from 'EXN' so without 'EXN' in this list, he will be denied\r\n        \"companyParties\": [\"supCon\", \"shipper\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "127.0.0.1:5000/api/nominations",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"nominations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Allowed - Action Does Not Require A Company Party But TPT Company Is Inherited",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_view\", // this action 'nomination_view' does NOT require a specific party to be inherited\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"PHI\", \"CHV\", \"MOB\", \"KMO\", \"EXN\"], // 'bob' only inherits from 'EXN' so as long as 'EXN' is somewhere in this list, it will be allowed.\r\n        \"companyParties\": [\"supCon\", \"shipper\", \"tankage\", \"tpt\", \"tpt\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -225,7 +287,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_create\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"CHV\"], // This principal has no permissions associated with this company, but does for 'EXN'\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_view\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"KMO\", \"CHV\", \"PHI\"], // This principal has no permissions associated with these companis, but does for 'EXN'\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -256,7 +318,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_create\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"CHV\", \"EXN\"], // This principal has permissions associated with only one of these companies, but only one is needed\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_create\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"P66\"], // This principal has permissions associated with only one of these companies, but only one is needed (possibly for specific party)\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -292,7 +354,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_create\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscriber\": \"MOB\" // This principal has no permissions associated with this subscriber, but does with 'CPL'\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_create\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"MOB\"] // This principal has no permissions associated with this subscriber, but does with 'CPL'\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -328,7 +390,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_create\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"KER\"], // This product type is not one of any inherited companies product types, but 'GAS' or 'JET' are.\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_create\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"KER\"], // This product type is not one of any inherited companies product types, but 'GAS' or 'JET' are.\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -359,7 +421,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_edit\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"], \r\n        \"productTypes\": [\"GAS\", \"KER\"], // One product type (GAS) is inherited from a company, the other (KER) is unknown\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_edit\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"], \r\n        \"productTypes\": [\"GAS\", \"KER\"], // One product type (GAS) is inherited from a company, the other (KER) is unknown\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -395,7 +457,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_edit\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"ATL\"], // This location is not one of any inherited companies locations, but 'DVD' is.\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_edit\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"ATL\"], // This location is not one of any inherited companies locations, but 'DVD' is.\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -426,7 +488,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_edit\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\", \"ATL\"], // One location (DVD) is inherited from a subscriber, the other (ATL) is unknown\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_edit\",\r\n    \"requestType\": \"evaluate\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\", \"ATL\"], // One location (DVD) is inherited from a subscriber, the other (ATL) is unknown\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -464,7 +526,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_view\",\r\n    \"requestType\": \"generate_query\",\r\n    \"unknown\": \"nominations\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscriber\": \"CPL\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"principal\": \"bob\",\r\n    \"action\": \"nomination_view\",\r\n    \"requestType\": \"generate_query\",\r\n    \"unknown\": \"nominations\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"EXN\", \"CHV\", \"EXN\"],\r\n        \"companyParties\": [\"shipper\", \"supCon\", \"tankage\"],\r\n        \"subscribers\": [\"CPL\"]\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -496,7 +558,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"principal\": \"alice\",\r\n    \"action\": \"ticket_view\",\r\n    \"requestType\": \"generate_query\",\r\n    \"unknown\": \"tickets\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"P66\"],\r\n        \"companyParties\": [\"shipper\"],\r\n        \"subscriber\": \"KMO\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"principal\": \"alice\",\r\n    \"action\": \"ticket_view\",\r\n    \"requestType\": \"generate_query\",\r\n    \"unknown\": \"tickets\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"P66\", \"EXN\", \"CHV\"],\r\n        \"companyParties\": [\"shipper\", \"subCon\", \"tankage\"],\r\n        \"subscribers\": [\"KMO\"]\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -528,7 +590,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"principal\": \"alice\",\r\n    \"action\": \"nomination_view\",\r\n    \"requestType\": \"generate_query\",\r\n    \"unknown\": \"nominations\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"P66\"],\r\n        \"companyParties\": [\"shipper\"],\r\n        \"subscriber\": \"KMO\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"principal\": \"alice\",\r\n    \"action\": \"nomination_view\", // Alice does not inherit this action, so no query is generated\r\n    \"requestType\": \"generate_query\",\r\n    \"unknown\": \"nominations\",\r\n    \"context\": {\r\n        \"locations\": [\"DVD\"],\r\n        \"productTypes\": [\"GAS\"],\r\n        \"companies\": [\"P66\", \"EXN\", \"CHV\"],\r\n        \"companyParties\": [\"shipper\", \"subCon\", \"tankage\"],\r\n        \"subscribers\": [\"KMO\"]\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

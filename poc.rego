@@ -54,8 +54,12 @@ user_permissions contains permission if {
 pss_right_is_valid if permissions[input.action].pss_right == ""
 pss_right_is_valid if permissions[input.action].pss_right in principal.pss_rights
 
-company_party_is_valid if permissions[input.action].companyParty == ""
-company_party_is_valid if permissions[input.action].companyParty in input.context.companyParties
+required_company_party := permissions[input.action].companyParty
+company_party_is_valid if required_company_party == "*"
+company_party_is_valid if {
+    required_company_party == input.context.companyParties[i]
+    input.context.companies[i] in inherited_companies
+}
 
 location_is_valid if "*" in inherited_locations
 location_is_valid if {
@@ -73,7 +77,7 @@ product_type_is_valid if {
 
 inherited_permissions contains permission if {
 	some permission in principal.permissions
-	permission.subscriber = input.context.subscriber
+	permission.subscriber in input.context.subscribers
 	permission.company in input.context.companies
 }
 
@@ -88,20 +92,23 @@ inherited_subscribers contains subscriber if {
 }
 
 subscriber_permissions contains subscriber_permission if {
-	some subscriber_permission in subscribers[input.context.subscriber].permissions
+    some subscriber in input.context.subscribers
+	some subscriber_permission in subscribers[subscriber].permissions
 }
 
 inherited_product_types contains productType if {
 	some permission in inherited_permissions
 	some company_permission in companies[permission.company].permissions
-	company_permission.subscriber = input.context.subscriber
+    some subscriber in input.context.subscribers
+	company_permission.subscriber = subscriber
 	some productType in company_permission.productTypes
 }
 
 inherited_locations contains location if {
 	some permission in inherited_permissions
 	some company_permission in companies[permission.company].permissions
-	company_permission.subscriber = input.context.subscriber
+    some subscriber in input.context.subscribers
+	company_permission.subscriber = subscriber
 	some location in company_permission.locations
 }
 
@@ -215,6 +222,7 @@ permissions_by_role := {
   "companyAdministrator": {
     "valid_actions": [
 	  "nomination_subscriber_confirm",
+      "nomination_tankage_confirm",
       "nomination_create",
       "nomination_edit",
       "nomination_view",
@@ -245,6 +253,7 @@ subscribers := {
     "CPL": {
         "permissions": [
 			"nomination_subscriber_confirm",
+            "nomination_tankage_confirm",
             "nomination_create",
             "nomination_edit",
             "nomination_view",
@@ -286,7 +295,7 @@ permissions := {
     },
     "nomination_view": {
         "pss_right": "",
-        "companyParty": ""
+        "companyParty": "*"
     },
     "ticket_create": {
         "pss_right": "",
@@ -298,7 +307,7 @@ permissions := {
     },
     "ticket_view": {
         "pss_right": "",
-        "companyParty": ""
+        "companyParty": "*"
     }
 }
 
