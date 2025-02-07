@@ -4,6 +4,19 @@ import rego.v1
 
 default allow := false
 
+# Policies to be enforced:
+# 1. A user can only perform actions that they have inherited the permissions for
+# 2. A user can only perform actions on locations, product types, and companies that they have inherited permissions for
+# 3. A user can only perform actions when a company party is required if they have the required inherited permissions
+# 4. A user can only perform actions if they have the required PSS right if defined
+# 5. A user can generate queries for nominations or tickets if they have the required permissions, locations, product types, and companies
+#
+# Rego documentations: https://www.openpolicyagent.org/docs/latest/policy-language/
+#
+
+#
+# Policy enforcement
+#
 allow if {
 	input.requestType = "evaluate"
 	input.action in user_permissions
@@ -43,6 +56,9 @@ allowedTickets[x] if {
 	data.tickets[x].subscriber = inherited_subscribers[_]
 }
 
+#
+# Policy rules and variables
+#
 principal := principals[input.principal]
 
 user_permissions contains permission if {
@@ -51,6 +67,44 @@ user_permissions contains permission if {
 	permission in subscriber_permissions
 }
 
+subscriber_permissions contains subscriber_permission if {
+    some subscriber in input.context.subscribers
+	some subscriber_permission in subscribers[subscriber].permissions
+}
+
+inherited_permissions contains permission if {
+	some permission in principal.permissions
+	permission.subscriber in input.context.subscribers
+	permission.company in input.context.companies
+}
+
+inherited_companies contains company if {
+	some permission in inherited_permissions
+	company = permission.company
+}
+
+inherited_subscribers contains subscriber if {
+	some permission in inherited_permissions
+	subscriber = permission.subscriber
+}
+
+inherited_product_types contains productType if {
+	some permission in inherited_permissions
+	some company_permission in companies[permission.company].permissions
+    some subscriber in input.context.subscribers
+	company_permission.subscriber = subscriber
+	some productType in company_permission.productTypes
+}
+
+inherited_locations contains location if {
+	some permission in inherited_permissions
+	some company_permission in companies[permission.company].permissions
+    some subscriber in input.context.subscribers
+	company_permission.subscriber = subscriber
+	some location in company_permission.locations
+}
+
+# Double policy variable assignment is Rego's way of doing a logical OR
 pss_right_is_valid if permissions[input.action].pss_right == ""
 pss_right_is_valid if permissions[input.action].pss_right in principal.pss_rights
 
@@ -75,43 +129,9 @@ product_type_is_valid if {
 	}
 }
 
-inherited_permissions contains permission if {
-	some permission in principal.permissions
-	permission.subscriber in input.context.subscribers
-	permission.company in input.context.companies
-}
-
-inherited_companies contains company if {
-	some permission in inherited_permissions
-	company = permission.company
-}
-
-inherited_subscribers contains subscriber if {
-	some permission in inherited_permissions
-	subscriber = permission.subscriber
-}
-
-subscriber_permissions contains subscriber_permission if {
-    some subscriber in input.context.subscribers
-	some subscriber_permission in subscribers[subscriber].permissions
-}
-
-inherited_product_types contains productType if {
-	some permission in inherited_permissions
-	some company_permission in companies[permission.company].permissions
-    some subscriber in input.context.subscribers
-	company_permission.subscriber = subscriber
-	some productType in company_permission.productTypes
-}
-
-inherited_locations contains location if {
-	some permission in inherited_permissions
-	some company_permission in companies[permission.company].permissions
-    some subscriber in input.context.subscribers
-	company_permission.subscriber = subscriber
-	some location in company_permission.locations
-}
-
+#
+# Backing data (static for a POC, will by externalized in a real-world scenario)
+#
 principals := {
     "bob": {
         "permissions": [
