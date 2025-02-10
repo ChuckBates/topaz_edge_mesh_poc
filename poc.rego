@@ -117,16 +117,14 @@ company_party_is_valid if {
 
 location_is_valid if "*" in inherited_locations
 location_is_valid if {
-	every location in input.context.locations {
-		location in inherited_locations
-	}
+	some location in input.context.locations
+    location in inherited_locations
 }
 
 product_type_is_valid if "*" in inherited_product_types
 product_type_is_valid if {
-	every productType in input.context.productTypes {
-		productType in inherited_product_types
-	}
+	some productType in input.context.productTypes
+    productType in inherited_product_types
 }
 
 #
