@@ -3,6 +3,7 @@
 Example library for wrapping the opa.py library with a Flask API. Modified to conform to 
 T4 use cases. Source: https://github.com/open-policy-agent/contrib/tree/main/data_filter_example
 """
+import json
 import sqlite3
 
 import flask

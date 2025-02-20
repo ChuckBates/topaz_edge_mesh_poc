@@ -52,7 +52,6 @@ def compile_http(query, input, unknowns):
             }
         ),
     )
-    print('response:', response.json())
     body = response.json()
     if response.status_code != 200:
         raise Exception("%s: %s" % (body.code, body.message))
@@ -120,6 +119,20 @@ def compile(q, input, unknowns, from_table=None, compile_func=None):
     )
 
     # Check if query is never or always defined.
+    if len(queries) == 0:
+        return Result(False, None)
+    elif any((len(x) == 0 for x in queries)):
+        return Result(True, None)
+
+    query_set = ast.QuerySet.from_data(queries)
+    queryPreprocessor().process(query_set)
+    clauses = queryTranslator(from_table).translate(query_set)
+
+    return Result(True, clauses)
+
+def generate_queries(body, from_table=None):
+    queries = body.get("result", {}).get("queries", [])
+
     if len(queries) == 0:
         return Result(False, None)
     elif any((len(x) == 0 for x in queries)):
