@@ -3,15 +3,37 @@
 This POC contains the files necessary to have the python server rely on a local [Aserto Edge Authorizer](https://docs.aserto.com/docs/edge-authorizers/overview) to act as the authorization decision point. 
 
 Directory Contents:
-- `policy-poc.yaml` Example aserto config for connecting to the example Aserto Cloud.
 - `requirements.txt` A set of python packages need to run the Flask API.
 - `server.py` The main entry point of the Python server, responsible for handiling API requests.
 - `opa.py` The OPA interface that runs alongside the Python server, used for SQL generation.
 - `sql.py` Helper SQL library that aids in the translation of OPA results to SQL where clauses.
+- `Aserto Edge Authorizer POC.postman_collection.json` Example API requests to interact directly with the edge authorizer
 
 ## Install
-For steps to setup a local Aserto Edge Authorizer, please see the Aserto [Docs](https://docs.aserto.com/docs/edge-authorizers/deployment-and-operation).
+### Aserto Edge Authorizer
+To setup an Aserto Edge Authorizer to connect to the example Aserto Cloud configured with the example T4 data please follow the steps below:
+- [Install the Aserto CLI](https://docs.aserto.com/docs/command-line-interface/aserto-cli/installation)
+- `aserto login` to connect the CLI to the Aserto Cloud (see @chuckbates for credentials).
+- `aserto install` will fetch the edge authorizer (topaz) docker image.
+- `aserto config new -n policy-poc --edge-authorizer=82532907-eedc-11ef-a22c-031f1f3ef1c7 --decision-logging` this will create a new aserto config with the connection to the Aserto Cloud that has already been setup.
+- The created config (`$HOME/.config/topaz/cfg/policy-poc.yaml` on Widows, likely `usr/home/config/topaz/cfg/policy-poc.yaml` on Mac) has a bug in it. Edit this file and replace `\` with `/` in both the `controller` and `decision_logger` sections
+- `aserto config use policy-poc` select the config just created.
+- `aserto start`
 
-Depending on your preferred install, you might be asked to login to the Aserto CLI, which will require credentials to the Aserto Cloud. Please see @chuckbates for credentials to connect to the example Aserto Cloud. 
+An edge authorizer (topaz) docker container should now be running and accepting requests. 
 
-If you wish to use the example config rather than creating your own, place the `policy-poc.yaml` file in your `config/topaz/cfg` directory (`$HOME/.config/topaz/cfg` on Widows, likely `usr/home/config/topaz/cfg` on Mac)
+### Python Server
+Install the dependencies into a virtualenv and start the python server:
+
+```bash
+virtualenv env
+source env/bin/activate
+pip install -r requirements.txt
+pip install -e .
+source env/bin/activate
+python server.py
+```
+
+## Use
+
+With the edge authorizer and the python server running, you can interact with the example API requests in the included `OPA POC.postman_collection.json` example requests. Additionally if you would like to interact with the edge authorizer directly the included `Aserto Edge Authorizer POC.postman_collection.json` example requests. 
