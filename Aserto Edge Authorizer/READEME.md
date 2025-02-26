@@ -7,7 +7,7 @@ Directory Contents:
 - `server.py` The main entry point of the Python server, responsible for handiling API requests.
 - `opa.py` The OPA interface that runs alongside the Python server, used for SQL generation.
 - `sql.py` Helper SQL library that aids in the translation of OPA results to SQL where clauses.
-- `Aserto Edge Authorizer POC.postman_collection.json` Example API requests to interact directly with the edge authorizer
+- `aserto_edge_authorizer_poc.insomnia.json` Example API requests to interact directly with the edge authorizer
 
 ## Install
 ### Aserto Edge Authorizer
@@ -36,4 +36,4 @@ python server.py
 
 ## Use
 
-With the edge authorizer and the python server running, you can interact with the example API requests in the included `OPA POC.postman_collection.json` example requests. Additionally if you would like to interact with the edge authorizer directly the included `Aserto Edge Authorizer POC.postman_collection.json` example requests. 
+With the edge authorizer and the python server running, you can interact with the example API requests in the included `opa_poc.insomnia.json` example requests. Additionally if you would like to interact with the edge authorizer directly the included `aserto_edge_authorizer_poc.insomnia.json` example requests can be used. 

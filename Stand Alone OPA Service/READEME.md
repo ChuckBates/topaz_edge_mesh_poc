@@ -5,7 +5,7 @@ This POC includes a stand alone OPA service to act as the authorization decision
 Directory Contents:
 - `opa_windows_amd64_v1.0.0.exe` A windows executable for running a stand alone OPA service. See [OPA Docs](https://www.openpolicyagent.org/docs/latest/#running-opa) for other options.
 - `poc.db` A small sqlite3 database for housing `nomination` and `ticket` data. Initialized by `server.py`.
-- `poc.rego` The rego policies used to evaluate authorization decisions. Also contains sample backing data to enable the included postman examples.
+- `poc.rego` The rego policies used to evaluate authorization decisions. Also contains sample backing data to enable the included insomnia examples.
 - `requirements.txt` A set of python packages need to run the Flask API.
 - `server.py` The main entry point of the Python server, responsible for handiling API requests and intializing the database.
 - `opa.py` The OPA interface to communicate with the OPA service that runs alongside the Python server.
@@ -37,4 +37,4 @@ source env/bin/activate
 python server.py
 ```
 
-The server listens on `:5000` and serves API requests found in the postman collection.
+The server listens on `:5000` and serves API requests found in the insomnia collection.

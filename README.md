@@ -14,7 +14,7 @@ Both of these POCs behave generally the same:
 The server itself is implemented in Python using Flask.
 
 Contents:
-- `OPA POC.postman_collection.json` A collect of preconfigured postman requests to test the expected behaviors of both `Stand Alone OPA Service` and `Aserto Edge Authorizer` scenarios. 
+- `opa_poc.insomnia.json` A collect of preconfigured insomnia requests to test the expected behaviors of both `Stand Alone OPA Service` and `Aserto Edge Authorizer` scenarios. 
 - `Stand Alone OPA Service` The first POC described above with a stand alone OPA service.
 - `Aserto Edge Authorizer` The second POC described above expecting an Aserto Edge Authorizer.
 
