@@ -131,7 +131,7 @@ product_type_is_valid if {
 # Backing data (static for a POC, will by externalized in a real-world scenario)
 #
 principals := {
-    "bob": {
+    "bob@transport4.com": {
         "permissions": [
 			{
                 "role": "companyAdministrator",
@@ -163,7 +163,7 @@ principals := {
             "pss_nomination_create"
         ]
     },
-	"alice": {
+	"alice@transport4.com": {
 		"permissions": [
 			{
 				"role": "inspector",
