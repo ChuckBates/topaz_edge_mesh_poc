@@ -88,6 +88,67 @@ def api_user_delete():
         }
     )
 
+@app.route('/api/user_permission', methods=["POST"])
+def api_user_permission_post():
+    input = flask.request.get_json(force=True)
+    
+    user_permission = User_Permission.create_user_permission(
+        company=input.get('company'),
+        subscriber=input.get('subscriber'),
+        locations=input.get('locations'),
+        product_types=input.get('product_types'),
+        role=input.get('role')
+    )
+
+    return flask.jsonify(
+        {
+            "user_permission_created": user_permission is not None,
+            "user_permission": user_permission.id
+        }
+    )
+
+@app.route('/api/user_permission', methods=["DELETE"])
+def api_user_permission_delete():
+    input = flask.request.get_json(force=True)
+    user_permission_id = input.get('user_permission_id')
+    result = User_Permission.delete_user_permission(permission_id=user_permission_id)
+
+    return flask.jsonify(
+        {
+            "user_permission_deleted": result
+        }
+    )
+
+@app.route('/api/user_permission/grant', methods=["POST"])
+def api_user_permission_grant():
+    input = flask.request.get_json(force=True)
+    
+    result = User_Permission.grant_user_permission(
+        user_id=input.get('user_id'),
+        user_permission_id=input.get('user_permission_id')
+    )
+
+    return flask.jsonify(
+        {
+            "user_permission_granted": result
+        }
+    )
+
+@app.route('/api/user_permission/grant', methods=["DELETE"])
+def api_user_permission_revoke():
+    input = flask.request.get_json(force=True)
+    
+    result = User_Permission.revoke_user_permission(
+        user_id=input.get('user_id'),
+        user_permission_id=input.get('user_permission_id')
+    )
+
+    return flask.jsonify(
+        {
+            "user_permission_revoked": result
+        }
+    )
+
 def invoke_search(input, unknown):
     url = 'https://localhost:8383/api/v2/authz/compile'
     body = {
