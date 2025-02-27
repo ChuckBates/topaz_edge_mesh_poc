@@ -4,10 +4,9 @@ Example library for wrapping the opa.py library with a Flask API. Modified to co
 T4 use cases. Source: https://github.com/open-policy-agent/contrib/tree/main/data_filter_example
 """
 import requests
-
 import flask
 from flask_bootstrap import Bootstrap
-
+from Directory import User, User_Permission
 import opa
 
 app = flask.Flask(__name__, static_url_path='/static')
@@ -50,6 +49,45 @@ def api_search_tickets():
     input = flask.request.get_json(force=True)
     result = invoke_search(input, "tickets")    
     return flask.jsonify(result)
+
+@app.route('/api/user', methods=["POST"])
+def api_user_post():
+    # Create user object
+    # Create both identity objects
+    # Create user_permission objects
+    # Create pss_right objects
+    # Create relations between all objects
+
+    input = flask.request.get_json(force=True)
+    
+    user = User.create_user(
+        user_id=input.get('user_id'),
+        display_name=input.get('display_name'),
+        email=input.get('email'),
+        picture=input.get('picture'),
+        pss_rights=input.get('pss_rights'),
+        status="USER_STATUS_ACTIVE"
+    )
+
+    return flask.jsonify(
+        {
+            "user_created": user is not None,
+            "user": user.id
+        }
+    )
+
+@app.route('/api/user', methods=["DELETE"])
+def api_user_delete():
+    input = flask.request.get_json(force=True)
+    user_id = input.get('user_id')
+    result = User.delete_user(user_id=user_id)
+
+    return flask.jsonify(
+        {
+            "user_deleted": result
+        }
+    )
+
 def invoke_search(input, unknown):
     url = 'https://localhost:8383/api/v2/authz/compile'
     body = {
