@@ -13,8 +13,8 @@ import opa
 app = flask.Flask(__name__, static_url_path='/static')
 Bootstrap(app)
 
-@app.route('/api/check', methods=["POST"])
-def api_nominations():
+@app.route('/api/nomination/check', methods=["POST"])
+def api_check_nominations():
     input = flask.request.get_json(force=True)
     url = 'https://localhost:8383/api/v2/authz/is'
     body = {
@@ -39,9 +39,18 @@ def api_nominations():
 
     return edge_response.json()
 
-@app.route('/api/search', methods=["POST"])
+@app.route('/api/nomination/search', methods=["POST"])
 def api_search_nominations():
     input = flask.request.get_json(force=True)
+    result = invoke_search(input, "nominations")
+    return flask.jsonify(result)
+
+@app.route('/api/ticket/search', methods=["POST"])
+def api_search_tickets():
+    input = flask.request.get_json(force=True)
+    result = invoke_search(input, "tickets")    
+    return flask.jsonify(result)
+def invoke_search(input, unknown):
     url = 'https://localhost:8383/api/v2/authz/compile'
     body = {
         "identity_context": {
@@ -67,7 +76,7 @@ def api_search_nominations():
         "query": "data.rebac.check.allow==true",
         "resource_context": input,
         "unknowns": [
-            "data." + input.get('unknown')
+            "data." + unknown
         ]
     }
 
@@ -75,16 +84,15 @@ def api_search_nominations():
     queries_result = opa.generate_queries(body=edge_response.json())
        
     if not queries_result.defined:
-        return flask.jsonify({'allowed': False})
+        return {'allowed': False}
     
     if queries_result.defined and queries_result.sql is None:
-        return flask.jsonify({'allowed': True, 'sql': None})
+        return {'allowed': True, 'sql': None}
     
-    result = {
+    return {
         'allowed': queries_result.defined,
         'sql': queries_result.sql.clauses[0].sql()
     }
-    return flask.jsonify(result)
 
 @app.teardown_appcontext
 def close_connection(e):
