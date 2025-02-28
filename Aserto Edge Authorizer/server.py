@@ -14,6 +14,7 @@ from directory.subscriber import Subscriber
 from directory.action_set import ActionSet
 from directory.role import Role
 from directory.action import Action
+from directory.location import Location
 from directory.directory_connection import directory_connection
 import opa
 
@@ -27,6 +28,7 @@ subscriber = Subscriber(directory_connection, relation)
 action_set = ActionSet(directory_connection, relation)
 role = Role(directory_connection, relation)
 action = Action(directory_connection)
+location = Location(directory_connection)
 
 @app.route('/api/nomination/check', methods=["POST"])
 def api_check_nominations():
@@ -396,6 +398,35 @@ def api_action_delete():
     return flask.jsonify(
         {
             "action_deleted": result
+        }
+    )
+
+@app.route('/api/location', methods=["POST"])
+def api_location_post():
+    input = flask.request.get_json(force=True)
+
+    created_location = location.create_location(
+        location_id=input.get('location_id'),
+        display_name=input.get('display_name')
+    )
+    
+    return flask.jsonify(
+        {
+            "location_created": created_location is not None,
+            "location": created_location.id
+        }
+    )
+
+@app.route('/api/location', methods=["DELETE"])
+def api_location_delete():
+    input = flask.request.get_json(force=True)
+
+    location_id = input.get('location_id')
+    result = location.delete_location(location_id)
+
+    return flask.jsonify(
+        {
+            "location_deleted": result
         }
     )
 
