@@ -15,6 +15,7 @@ from directory.action_set import ActionSet
 from directory.role import Role
 from directory.action import Action
 from directory.location import Location
+from directory.product_type import ProductType
 from directory.directory_connection import directory_connection
 import opa
 
@@ -29,6 +30,7 @@ action_set = ActionSet(directory_connection, relation)
 role = Role(directory_connection, relation)
 action = Action(directory_connection)
 location = Location(directory_connection)
+product_type = ProductType(directory_connection)
 
 @app.route('/api/nomination/check', methods=["POST"])
 def api_check_nominations():
@@ -427,6 +429,35 @@ def api_location_delete():
     return flask.jsonify(
         {
             "location_deleted": result
+        }
+    )
+
+@app.route('/api/product_type', methods=["POST"])
+def api_product_type_post():
+    input = flask.request.get_json(force=True)
+
+    created_product_type = product_type.create_product_type(
+        product_type_id=input.get('product_type_id'),
+        display_name=input.get('display_name')
+    )
+    
+    return flask.jsonify(
+        {
+            "product_type_created": created_product_type is not None,
+            "product_type": created_product_type.id
+        }
+    )
+
+@app.route('/api/product_type', methods=["DELETE"])
+def api_product_type_delete():
+    input = flask.request.get_json(force=True)
+
+    product_type_id = input.get('product_type_id')
+    result = product_type.delete_product_type(product_type_id)
+
+    return flask.jsonify(
+        {
+            "product_type_deleted": result
         }
     )
 
