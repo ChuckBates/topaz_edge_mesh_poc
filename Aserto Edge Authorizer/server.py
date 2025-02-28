@@ -10,6 +10,7 @@ from directory.user import User
 from directory.user_permission import UserPermission
 from directory.relation import Relation
 from directory.company import Company
+from directory.subscriber import Subscriber
 from directory.directory_connection import directory_connection
 import opa
 
@@ -18,6 +19,8 @@ Bootstrap(app)
 relation = Relation(directory_connection)
 user = User(directory_connection, relation)
 user_permission = UserPermission(directory_connection, relation)
+company = Company(directory_connection)
+subscriber = Subscriber(directory_connection, relation)
 
 @app.route('/api/nomination/check', methods=["POST"])
 def api_check_nominations():
@@ -140,7 +143,7 @@ def api_user_permission_grant():
         }
     )
 
-@app.route('/api/user_permission/grant', methods=["DELETE"])
+@app.route('/api/user_permission/revoke', methods=["POST"])
 def api_user_permission_revoke():
     input = flask.request.get_json(force=True)
     
@@ -159,7 +162,7 @@ def api_user_permission_revoke():
 def api_company_post():
     input = flask.request.get_json(force=True)
 
-    created_company = Company(directory_connection).create_company(
+    created_company = company.create_company(
         company_id=input.get('company_id'),
         display_name=input.get('display_name')
     )
@@ -174,13 +177,72 @@ def api_company_post():
 @app.route('/api/company', methods=["DELETE"])
 def api_company_delete():
     input = flask.request.get_json(force=True)
-    
+
     company_id = input.get('company_id')
-    result = Company(directory_connection).delete_company(company_id)
+    result = company.delete_company(company_id)
 
     return flask.jsonify(
         {
             "company_deleted": result
+        }
+    )
+
+@app.route('/api/subscriber', methods=["POST"])
+def api_subscriber_post():
+    input = flask.request.get_json(force=True)
+
+    created_subscriber = subscriber.create_subscriber(
+        subscriber_id=input.get('subscriber_id'),
+        display_name=input.get('display_name')
+    )
+    
+    return flask.jsonify(
+        {
+            "subscriber_created": created_subscriber is not None,
+            "subscriber": created_subscriber.id
+        }
+    )
+
+@app.route('/api/subscriber', methods=["DELETE"])
+def api_subscriber_delete():
+    input = flask.request.get_json(force=True)
+
+    subscriber_id = input.get('subscriber_id')
+    result = subscriber.delete_subscriber(subscriber_id)
+
+    return flask.jsonify(
+        {
+            "subscriber_deleted": result
+        }
+    )
+
+@app.route('/api/subscriber/grant_action_set', methods=["POST"])
+def api_subscriber_grant():
+    input = flask.request.get_json(force=True)
+    
+    result = subscriber.grant_action_set(
+        action_set_id=input.get('action_set_id'),
+        subscriber_id=input.get('subscriber_id')
+    )
+
+    return flask.jsonify(
+        {
+            "action_set_granted": result
+        }
+    )
+
+@app.route('/api/subscriber/revoke_action_set', methods=["POST"])
+def api_subscriber_revoke():
+    input = flask.request.get_json(force=True)
+    
+    result = subscriber.revoke_action_set(
+        action_set_id=input.get('action_set_id'),
+        subscriber_id=input.get('subscriber_id')
+    )
+
+    return flask.jsonify(
+        {
+            "action_set_revoked": result
         }
     )
 
