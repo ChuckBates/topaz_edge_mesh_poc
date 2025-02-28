@@ -11,6 +11,8 @@ from directory.user_permission import UserPermission
 from directory.relation import Relation
 from directory.company import Company
 from directory.subscriber import Subscriber
+from directory.action_set import ActionSet
+from directory.role import Role
 from directory.directory_connection import directory_connection
 import opa
 
@@ -21,6 +23,8 @@ user = User(directory_connection, relation)
 user_permission = UserPermission(directory_connection, relation)
 company = Company(directory_connection)
 subscriber = Subscriber(directory_connection, relation)
+action_set = ActionSet(directory_connection, relation)
+role = Role(directory_connection, relation)
 
 @app.route('/api/nomination/check', methods=["POST"])
 def api_check_nominations():
@@ -243,6 +247,124 @@ def api_subscriber_revoke():
     return flask.jsonify(
         {
             "action_set_revoked": result
+        }
+    )
+
+@app.route('/api/action_set', methods=["POST"])
+def api_action_set_post():
+    input = flask.request.get_json(force=True)
+
+    created_action_set = action_set.create_action_set(
+        action_set_id=input.get('action_set_id'),
+        display_name=input.get('display_name')
+    )
+    
+    return flask.jsonify(
+        {
+            "action_set_created": created_action_set is not None,
+            "action_set": created_action_set.id
+        }
+    )
+
+@app.route('/api/action_set', methods=["DELETE"])
+def api_action_set_delete():
+    input = flask.request.get_json(force=True)
+
+    action_set_id = input.get('action_set_id')
+    result = action_set.delete_action_set(action_set_id)
+
+    return flask.jsonify(
+        {
+            "action_set_deleted": result
+        }
+    )
+
+@app.route('/api/action_set/grant_action', methods=["POST"])
+def api_action_set_grant():
+    input = flask.request.get_json(force=True)
+    
+    result = action_set.grant_action(
+        action_id=input.get('action_id'),
+        action_set_id=input.get('action_set_id')
+    )
+
+    return flask.jsonify(
+        {
+            "action_granted": result
+        }
+    )
+
+@app.route('/api/action_set/revoke_action', methods=["POST"])
+def api_action_set_revoke():
+    input = flask.request.get_json(force=True)
+    
+    result = action_set.revoke_action(
+        action_id=input.get('action_id'),
+        action_set_id=input.get('action_set_id')
+    )
+
+    return flask.jsonify(
+        {
+            "action_revoked": result
+        }
+    )
+
+@app.route('/api/role', methods=["POST"])
+def api_role_post():
+    input = flask.request.get_json(force=True)
+
+    created_role = role.create_role(
+        role_id=input.get('role_id'),
+        display_name=input.get('display_name')
+    )
+    
+    return flask.jsonify(
+        {
+            "role_created": created_role is not None,
+            "role": created_role.id
+        }
+    )
+
+@app.route('/api/role', methods=["DELETE"])
+def api_role_delete():
+    input = flask.request.get_json(force=True)
+
+    role_id = input.get('role_id')
+    result = role.delete_role(role_id)
+
+    return flask.jsonify(
+        {
+            "role_deleted": result
+        }
+    )
+
+@app.route('/api/role/grant_action', methods=["POST"])
+def api_role_grant():
+    input = flask.request.get_json(force=True)
+    
+    result = role.grant_action(
+        action_id=input.get('action_id'),
+        role_id=input.get('role_id')
+    )
+
+    return flask.jsonify(
+        {
+            "action_granted": result
+        }
+    )
+
+@app.route('/api/role/revoke_action', methods=["POST"])
+def api_role_revoke():
+    input = flask.request.get_json(force=True)
+    
+    result = role.revoke_action(
+        action_id=input.get('action_id'),
+        role_id=input.get('role_id')
+    )
+
+    return flask.jsonify(
+        {
+            "action_revoked": result
         }
     )
 
