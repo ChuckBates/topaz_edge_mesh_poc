@@ -64,7 +64,7 @@ class UserPermission:
             return "User " + user_id + " not found"
 
         # create user relation
-        self.relation.create_relation("user_permission", user_permission.id, "member", "user", user_id)
+        self.relation.create_relation("user_permission", user_permission.id, "member", "user", user.id)
 
         return "User Permission " + user_permission.id + " granted to user " + user_id
 
@@ -85,6 +85,6 @@ class UserPermission:
             return "User " + user_id + " not found"
         
         # delete user relation
-        self.relation.delete_relation("user_permission", user_permission.id, "member", "user", user_id)
+        self.relation.delete_relation("user_permission", user_permission.id, "member", "user", user.id)
 
         return "User Permission " + user_permission.id + " revoked from user " + user_id
