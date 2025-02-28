@@ -16,6 +16,7 @@ from directory.role import Role
 from directory.action import Action
 from directory.location import Location
 from directory.product_type import ProductType
+from directory.pss_right import PssRight
 from directory.directory_connection import directory_connection
 import opa
 
@@ -31,6 +32,7 @@ role = Role(directory_connection, relation)
 action = Action(directory_connection)
 location = Location(directory_connection)
 product_type = ProductType(directory_connection)
+pss_right = PssRight(directory_connection)
 
 @app.route('/api/nomination/check', methods=["POST"])
 def api_check_nominations():
@@ -458,6 +460,35 @@ def api_product_type_delete():
     return flask.jsonify(
         {
             "product_type_deleted": result
+        }
+    )
+
+@app.route('/api/pss_right', methods=["POST"])
+def api_pss_right_post():
+    input = flask.request.get_json(force=True)
+
+    created_pss_right = pss_right.create_pss_right(
+        pss_right_id=input.get('pss_right_id'),
+        display_name=input.get('display_name')
+    )
+    
+    return flask.jsonify(
+        {
+            "pss_right_created": created_pss_right is not None,
+            "pss_right": created_pss_right.id
+        }
+    )
+
+@app.route('/api/pss_right', methods=["DELETE"])
+def api_pss_right_delete():
+    input = flask.request.get_json(force=True)
+
+    pss_right_id = input.get('pss_right_id')
+    result = pss_right.delete_pss_right(pss_right_id)
+
+    return flask.jsonify(
+        {
+            "pss_right_deleted": result
         }
     )
 
