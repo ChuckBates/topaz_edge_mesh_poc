@@ -6,11 +6,17 @@ T4 use cases. Source: https://github.com/open-policy-agent/contrib/tree/main/dat
 import requests
 import flask
 from flask_bootstrap import Bootstrap
-from Directory import User, User_Permission
+from directory.user import User
+from directory.user_permission import UserPermission
+from directory.relation import Relation
+from directory.directory_connection import directory_connection
 import opa
 
 app = flask.Flask(__name__, static_url_path='/static')
 Bootstrap(app)
+relation = Relation(directory_connection)
+user = User(directory_connection, relation)
+user_permission = UserPermission(directory_connection, relation)
 
 @app.route('/api/nomination/check', methods=["POST"])
 def api_check_nominations():
@@ -60,19 +66,18 @@ def api_user_post():
 
     input = flask.request.get_json(force=True)
     
-    user = User.create_user(
+    created_user = user.create_user(
         user_id=input.get('user_id'),
         display_name=input.get('display_name'),
         email=input.get('email'),
         picture=input.get('picture'),
-        pss_rights=input.get('pss_rights'),
-        status="USER_STATUS_ACTIVE"
+        pss_rights=input.get('pss_rights')
     )
 
     return flask.jsonify(
         {
-            "user_created": user is not None,
-            "user": user.id
+            "user_created": created_user is not None,
+            "user": created_user.id
         }
     )
 
@@ -80,7 +85,7 @@ def api_user_post():
 def api_user_delete():
     input = flask.request.get_json(force=True)
     user_id = input.get('user_id')
-    result = User.delete_user(user_id=user_id)
+    result = user.delete_user(user_id=user_id)
 
     return flask.jsonify(
         {
@@ -92,7 +97,7 @@ def api_user_delete():
 def api_user_permission_post():
     input = flask.request.get_json(force=True)
     
-    user_permission = User_Permission.create_user_permission(
+    created_user_permission = user_permission.create_user_permission(
         company=input.get('company'),
         subscriber=input.get('subscriber'),
         locations=input.get('locations'),
@@ -102,8 +107,8 @@ def api_user_permission_post():
 
     return flask.jsonify(
         {
-            "user_permission_created": user_permission is not None,
-            "user_permission": user_permission.id
+            "user_permission_created": created_user_permission is not None,
+            "user_permission": created_user_permission.id
         }
     )
 
@@ -111,7 +116,7 @@ def api_user_permission_post():
 def api_user_permission_delete():
     input = flask.request.get_json(force=True)
     user_permission_id = input.get('user_permission_id')
-    result = User_Permission.delete_user_permission(permission_id=user_permission_id)
+    result = user_permission.delete_user_permission(permission_id=user_permission_id)
 
     return flask.jsonify(
         {
@@ -123,7 +128,7 @@ def api_user_permission_delete():
 def api_user_permission_grant():
     input = flask.request.get_json(force=True)
     
-    result = User_Permission.grant_user_permission(
+    result = user_permission.grant_user_permission(
         user_id=input.get('user_id'),
         user_permission_id=input.get('user_permission_id')
     )
@@ -138,7 +143,7 @@ def api_user_permission_grant():
 def api_user_permission_revoke():
     input = flask.request.get_json(force=True)
     
-    result = User_Permission.revoke_user_permission(
+    result = user_permission.revoke_user_permission(
         user_id=input.get('user_id'),
         user_permission_id=input.get('user_permission_id')
     )

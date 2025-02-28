@@ -1,90 +1,93 @@
 #!/usr/bin/env python
 
 from hashlib import blake2b
-from Directory import Relation
-from Directory.DirectoryConnection import directory_connection
 
-def create_user(user_id, display_name, email, picture, pss_rights, status):
-    user = directory_connection.set_object(
-        properties={
-            "email": email,
-            "picture": picture,
-            "pss_rights": pss_rights,
-            "status": status
-        },
-        object_type="user",
-        object_id=user_id,
-        display_name=display_name
-    )
-    # create email identity
-    email_identity = create_email_identity(email)
-    # create pid identity
-    pid = blake2b((user_id + email).encode('utf-8'), digest_size=16).hexdigest()
-    pid_identity = create_pid_identity("local|" + pid)
-    # create relations
-    Relation.create_relation("identity", email_identity.id, "identifier", "user", user.id)
-    Relation.create_relation("identity", pid_identity.id, "identifier", "user", user.id)
-    for pss_right in pss_rights:
-        Relation.create_relation("pss_right", pss_right, "member", "user", user.id)    
+class User:    
+    def __init__(self, directory_connection, relation):
+        self.directory_connection = directory_connection
+        self.relation = relation
 
-    return user
-
-def delete_user(user_id):
-    try:
-        user = directory_connection.get_object(
+    def create_user(self, user_id, display_name, email, picture, pss_rights):
+        user = self.directory_connection.set_object(
+            properties={
+                "email": email,
+                "picture": picture,
+                "pss_rights": pss_rights,
+                "status": "USER_STATUS_ACTIVE"
+            },
             object_type="user",
-            object_id=user_id
+            object_id=user_id,
+            display_name=display_name
         )
-    except Exception as e:
-        return "User not found"
-    
-    identity_relations = directory_connection.get_relations(
-        object_type="identity",
-        relation="identifier",
-        subject_type="user",
-        subject_id=user.id,
-        with_objects=True
-    )
+        # create email identity
+        email_identity = self.create_email_identity(email)
+        # create pid identity
+        pid = blake2b((user_id + email).encode('utf-8'), digest_size=16).hexdigest()
+        pid_identity = self.create_pid_identity("local|" + pid)
+        # create relations
+        self.relation.create_relation("identity", email_identity.id, "identifier", "user", user.id)
+        self.relation.create_relation("identity", pid_identity.id, "identifier", "user", user.id)
+        for pss_right in pss_rights:
+            self.relation.create_relation("pss_right", pss_right, "member", "user", user.id)    
 
-    directory_connection.delete_object(
-        object_type="user",
-        object_id=user_id,
-        with_relations=True
-    )
+        return user
 
-    for identity_relation in identity_relations.objects:
-        if identity_relation.type == "identity":
-            directory_connection.delete_object(
-                object_type="identity",
-                object_id=identity_relation.id,
-                with_relations=False
+    def delete_user(self, user_id):
+        try:
+            user = self.directory_connection.get_object(
+                object_type="user",
+                object_id=user_id
             )
+        except Exception as e:
+            return "User not found"
+        
+        identity_relations = self.directory_connection.get_relations(
+            object_type="identity",
+            relation="identifier",
+            subject_type="user",
+            subject_id=user.id,
+            with_objects=True
+        )
 
-    return "User deleted"
+        self.directory_connection.delete_object(
+            object_type="user",
+            object_id=user_id,
+            with_relations=True
+        )
+
+        for identity_relation in identity_relations.objects:
+            if identity_relation.type == "identity":
+                self.directory_connection.delete_object(
+                    object_type="identity",
+                    object_id=identity_relation.id,
+                    with_relations=False
+                )
+
+        return "User deleted"
 
 
-def create_email_identity(identity_id):
-    identity = directory_connection.set_object(
-        properties={
-            "kind": "IDENTITY_KIND_EMAIL",
-            "provider": "local",
-            "verified": True
-        },
-        object_type="identity",
-        object_id=identity_id,
-        display_name=identity_id
-    )
-    return identity
+    def create_email_identity(self, identity_id):
+        identity = self.directory_connection.set_object(
+            properties={
+                "kind": "IDENTITY_KIND_EMAIL",
+                "provider": "local",
+                "verified": True
+            },
+            object_type="identity",
+            object_id=identity_id,
+            display_name=identity_id
+        )
+        return identity
 
-def create_pid_identity(identity_id):
-    identity = directory_connection.set_object(
-        properties={
-            "kind": "IDENTITY_KIND_PID",
-            "provider": "local",
-            "verified": True
-        },
-        object_type="identity",
-        object_id=identity_id,
-        display_name=identity_id
-    )
-    return identity
+    def create_pid_identity(self, identity_id):
+        identity = self.directory_connection.set_object(
+            properties={
+                "kind": "IDENTITY_KIND_PID",
+                "provider": "local",
+                "verified": True
+            },
+            object_type="identity",
+            object_id=identity_id,
+            display_name=identity_id
+        )
+        return identity
