@@ -13,6 +13,7 @@ from directory.company import Company
 from directory.subscriber import Subscriber
 from directory.action_set import ActionSet
 from directory.role import Role
+from directory.action import Action
 from directory.directory_connection import directory_connection
 import opa
 
@@ -25,6 +26,7 @@ company = Company(directory_connection)
 subscriber = Subscriber(directory_connection, relation)
 action_set = ActionSet(directory_connection, relation)
 role = Role(directory_connection, relation)
+action = Action(directory_connection)
 
 @app.route('/api/nomination/check', methods=["POST"])
 def api_check_nominations():
@@ -365,6 +367,35 @@ def api_role_revoke():
     return flask.jsonify(
         {
             "action_revoked": result
+        }
+    )
+
+@app.route('/api/action', methods=["POST"])
+def api_action_post():
+    input = flask.request.get_json(force=True)
+
+    created_action = action.create_action(
+        action_id=input.get('action_id'),
+        display_name=input.get('display_name')
+    )
+    
+    return flask.jsonify(
+        {
+            "action_created": created_action is not None,
+            "action": created_action.id
+        }
+    )
+
+@app.route('/api/action', methods=["DELETE"])
+def api_action_delete():
+    input = flask.request.get_json(force=True)
+
+    action_id = input.get('action_id')
+    result = action.delete_action(action_id)
+
+    return flask.jsonify(
+        {
+            "action_deleted": result
         }
     )
 
