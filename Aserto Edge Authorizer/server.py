@@ -9,6 +9,7 @@ from flask_bootstrap import Bootstrap
 from directory.user import User
 from directory.user_permission import UserPermission
 from directory.relation import Relation
+from directory.company import Company
 from directory.directory_connection import directory_connection
 import opa
 
@@ -151,6 +152,35 @@ def api_user_permission_revoke():
     return flask.jsonify(
         {
             "user_permission_revoked": result
+        }
+    )
+
+@app.route('/api/company', methods=["POST"])
+def api_company_post():
+    input = flask.request.get_json(force=True)
+
+    created_company = Company(directory_connection).create_company(
+        company_id=input.get('company_id'),
+        display_name=input.get('display_name')
+    )
+    
+    return flask.jsonify(
+        {
+            "company_created": created_company is not None,
+            "company": created_company.id
+        }
+    )
+
+@app.route('/api/company', methods=["DELETE"])
+def api_company_delete():
+    input = flask.request.get_json(force=True)
+    
+    company_id = input.get('company_id')
+    result = Company(directory_connection).delete_company(company_id)
+
+    return flask.jsonify(
+        {
+            "company_deleted": result
         }
     )
 
