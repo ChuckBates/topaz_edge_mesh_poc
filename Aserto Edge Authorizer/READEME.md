@@ -8,6 +8,9 @@ Directory Contents:
 - `opa.py` The OPA interface that runs alongside the Python server, used for SQL generation.
 - `sql.py` Helper SQL library that aids in the translation of OPA results to SQL where clauses.
 - `aserto_edge_authorizer_poc.insomnia.json` Example API requests to interact directly with the edge authorizer
+- `directory` collection of python classes to interact with the Aserto Control Plane.
+- `tests` collection of unit tests to validate the `directory` classes.
+- `AsertoEdgeAuthorizerPoC.png` diagram of how the edge authorizer, python server, and Aserto control plane interact.
 
 ## Install
 ### Aserto Edge Authorizer
