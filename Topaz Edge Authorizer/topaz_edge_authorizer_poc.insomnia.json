@@ -1,0 +1,3832 @@
+type: collection.insomnia.rest/5.0
+name: Scratch Pad
+meta:
+  id: wrk_scratchpad
+  created: 1744749093709
+  modified: 1744749093709
+collection:
+  - name: Python Server
+    meta:
+      id: fld_3d779ceab8184654885e2e31f382def4
+      created: 1740596363038
+      modified: 1746564143454
+      sortKey: -1740596361505
+    children:
+      - name: Allow/Deny Requests
+        meta:
+          id: fld_adb91100e8824a9b809739855774d9f3
+          created: 1740596363040
+          modified: 1740596363040
+          sortKey: -1740596361504
+        children:
+          - name: Happy Path / Default
+            meta:
+              id: fld_101f0250e9bb4f70b28552eee75e23cd
+              created: 1740596363042
+              modified: 1740596363042
+              sortKey: -1740596361503
+            children:
+              - url: http://localhost:5000/api/nomination/check
+                name: Allowed
+                meta:
+                  id: req_090b16ff75d14522ab8a6956a37a3f51
+                  created: 1740596363044
+                  modified: 1746566859854
+                  isPrivate: false
+                  sortKey: -1740596361502
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_create",
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "CHV", "EXN"],
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Actions
+            meta:
+              id: fld_879658582b3d4941be155bb5f05452d8
+              created: 1740596363046
+              modified: 1740596363046
+              sortKey: -1740596361501
+            children:
+              - url: http://localhost:5000/api/nomination/check
+                name: Denied - Action Not Inherited
+                meta:
+                  id: req_b7a9cac14aff4b0a80c4c7fdefd11e4a
+                  created: 1740596363047
+                  modified: 1746566898750
+                  isPrivate: false
+                  sortKey: -1740596361500
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "alice@transport4.com",
+                        "action": "nomination_view", {# Alice is an inspector, who by default only gets 'nomination_view' and 'ticket_view', but her subscriber (KMO) only has ticket permissions, thus only 'ticket_view' works for Alice. #}
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["P66", "P66", "EXN"],
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["KMO"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/nomination/check
+                name: Denied - Action Not Assigned To Any Roles Or Subscribers
+                meta:
+                  id: req_3a24edc9d6e44978804ad21cdcc9acbd
+                  created: 1740596363048
+                  modified: 1746567017723
+                  isPrivate: false
+                  sortKey: -1740596361499
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "admin_add_application", {# This action is not granted to any subscribers #}
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "CHV", "EXN"],
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: PSS Rights
+            meta:
+              id: fld_5596bff04237466586874631fff0bb5c
+              created: 1740596363049
+              modified: 1740596363049
+              sortKey: -1740596361498
+            children:
+              - url: http://localhost:5000/api/nomination/check
+                name: Denied - Missing PSS Right For Action
+                meta:
+                  id: req_7c009d4e8db54995a26c4b4684e340b6
+                  created: 1740596363050
+                  modified: 1746567027216
+                  isPrivate: false
+                  sortKey: -1740596361497
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_subscriber_confirm", {# This action requires the pss right 'pss_nomination_subscriber_confirm' which 'bob' does not have #}
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "EXN", "CHV", "EXN"],
+                        "companyParties": ["carrier", "shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Company Party
+            meta:
+              id: fld_5fbd4abeb72641078c233aca39035c7d
+              created: 1740596363050
+              modified: 1740596363050
+              sortKey: -1740596361496
+            children:
+              - url: http://localhost:5000/api/nomination/check
+                name: Denied - Shipper Party Required By Action Not Inherited By Principal
+                meta:
+                  id: req_cd56bb8c097a46d6aa55cf56594be711
+                  created: 1740596363051
+                  modified: 1746567031633
+                  isPrivate: false
+                  sortKey: -1740596361495
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_edit",
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "CHV", "EXN"],
+                        "companyParties": ["supCon", "shipper", "tankage"], {# this action 'nomination_edit' requires 'shipper' party to be inherited but 'bob' does NOT have permissions for 'CHV' #}
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/nomination/check
+                name: Denied - Action Does Not Require A Company Party But No Companies Are
+                  Inherited
+                meta:
+                  id: req_221776f21a854d0ea2dc4cb9af7b6df6
+                  created: 1740596363052
+                  modified: 1746567041937
+                  isPrivate: false
+                  sortKey: -1740596361493
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_view", {# this action 'nomination_view' does NOT require a specific party to be inherited, but no companies requested below are inheritied. #}
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["PHI", "CHV", "MOB"], {# 'bob' only inherits from 'EXN' so without 'EXN' in this list, he will be denied #}
+                        "companyParties": ["supCon", "shipper", "tankage"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/nomination/check
+                name: Denied - Tankage Party Required By Action Not Inherited By Principal
+                meta:
+                  id: req_7f4a4a6f81614fc0930c02c27aca9aa7
+                  created: 1740596363052
+                  modified: 1746567036128
+                  isPrivate: false
+                  sortKey: -1740596361494
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_tankage_confirm",
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "EXN", "PHI"],
+                        "companyParties": ["supCon", "shipper", "tankage"], {# this action 'nomination_tankage_confirm' requires 'tankage' party to be inherited but 'bob' does NOT have permissions for 'PHI' #}
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/nomination/check
+                name: Allowed - Action Does Not Require A Company Party But TPT Company Is
+                  Inherited
+                meta:
+                  id: req_80f932c5a3f44fd5ace7a012a76ae283
+                  created: 1740596363053
+                  modified: 1746567046941
+                  isPrivate: false
+                  sortKey: -1740596361492
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_view", {# this action 'nomination_view' does NOT require a specific party to be inherited #}
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["PHI", "CHV", "MOB", "KMO", "EXN"], {# 'bob' only inherits from 'EXN' so as long as 'EXN' is somewhere in this list, it will be allowed. #}
+                        "companyParties": ["supCon", "shipper", "tankage", "tpt", "tpt"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Company
+            meta:
+              id: fld_14f6d7a2a8214ce7bcb8204cab2e0c38
+              created: 1740596363054
+              modified: 1740596363054
+              sortKey: -1740596361491
+            children:
+              - url: http://localhost:5000/api/nomination/check
+                name: Denied - No Principal Permissions For Company
+                meta:
+                  id: req_962dbc809f5e4b60be361b31223999c7
+                  created: 1740596363054
+                  modified: 1746567051652
+                  isPrivate: false
+                  sortKey: -1740596361490
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_view",
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["KMO", "CHV", "PHI"], {# This principal has no permissions associated with these companis, but does for 'EXN' #}
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/nomination/check
+                name: Allowed - Principal Permissions For Some But Not All Companies
+                meta:
+                  id: req_e0a2e4507a2b4893a36efbc45b9f6161
+                  created: 1740596363055
+                  modified: 1746567055311
+                  isPrivate: false
+                  sortKey: -1740596361489
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_create",
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "CHV", "P66"], {# This principal has permissions associated with only one of these companies, but only one is needed (possibly for specific party) #}
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Subscriber
+            meta:
+              id: fld_fccf3d1198974613a6d6a24e8a11e732
+              created: 1740596363056
+              modified: 1740596363056
+              sortKey: -1740596361488
+            children:
+              - url: http://localhost:5000/api/nomination/check
+                name: Denied - No Principal Permissions For Subscriber
+                meta:
+                  id: req_c9e2ee6d64d94ddd9e5ba8779f627370
+                  created: 1740596363057
+                  modified: 1746567059676
+                  isPrivate: false
+                  sortKey: -1740596361487
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_create",
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "CHV", "EXN"],
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["MOB"] {# This principal has no permissions associated with this subscriber, but does with 'CPL' #}
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Product Type
+            meta:
+              id: fld_ba9052a8fab9461fbfcd5b1c8a847f82
+              created: 1740596363058
+              modified: 1740596363058
+              sortKey: -1740596361486
+            children:
+              - url: http://localhost:5000/api/nomination/check
+                name: Denied - Product Type Not Inherited From Companies
+                meta:
+                  id: req_d9017a92af714d949a14ac320add42af
+                  created: 1740596363058
+                  modified: 1746567064228
+                  isPrivate: false
+                  sortKey: -1740596361485
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_create",
+                        "requestType": "evaluate",
+                        "locations": ["DVD"],
+                        "productTypes": ["KER"], {# This product type is not one of any inherited companies product types, but 'GAS' or 'JET' are. #}
+                        "companies": ["EXN", "CHV", "EXN"],
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/nomination/check
+                name: Allowed - One But Not All Product Types Inherited From Companies
+                meta:
+                  id: req_21d7aa7b95264447b77eb0ba6ccfdb12
+                  created: 1740596363059
+                  modified: 1746567068452
+                  isPrivate: false
+                  sortKey: -1740596361484
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_edit",
+                        "requestType": "evaluate",
+                        "locations": ["DVD"], 
+                        "productTypes": ["GAS", "KER"], {# One product type (GAS) is inherited from a company, the other (KER) is unknown #}
+                        "companies": ["EXN", "CHV", "EXN"],
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Location
+            meta:
+              id: fld_1dc4552514364f3799c1c1cfb94030e8
+              created: 1740596363060
+              modified: 1740596363060
+              sortKey: -1740596361483
+            children:
+              - url: http://localhost:5000/api/nomination/check
+                name: Allowed - One But Not All Locations Inherited From Companies
+                meta:
+                  id: req_390f782de76140799c3284687d9643de
+                  created: 1740596363061
+                  modified: 1746567077661
+                  isPrivate: false
+                  sortKey: -1740596361481
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_edit",
+                        "requestType": "evaluate",
+                        "locations": ["DVD", "ATL"], {# One location (DVD) is inherited from a subscriber, the other (ATL) is unknown #}
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "CHV", "EXN"],
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/nomination/check
+                name: Denied - Location Not Inherited From Companies
+                meta:
+                  id: req_a0e233b244794a92bde6c034a9be03de
+                  created: 1740596363061
+                  modified: 1746567073384
+                  isPrivate: false
+                  sortKey: -1740596361482
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_edit",
+                        "requestType": "evaluate",
+                        "locations": ["ATL"], {# This location is not one of any inherited companies locations, but 'DVD' is. #}
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "CHV", "EXN"],
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+      - name: SQL Generation Requests
+        meta:
+          id: fld_b67be665138f4275b9d2f5354203f308
+          created: 1740596363062
+          modified: 1740596363062
+          sortKey: -1740596361480
+        children:
+          - url: http://localhost:5000/api/nomination/search
+            name: Allowed - Nomination Search (Bob)
+            meta:
+              id: req_07ebce63e4d54bb69245b88529c08802
+              created: 1740596363063
+              modified: 1746566527776
+              isPrivate: false
+              sortKey: -1740596361479
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                    "principal": "bob@transport4.com",
+                    "action": "nomination_view",
+                    "requestType": "generate_query",
+                    "unknown": "nominations",
+                    "locations": ["DVD"],
+                    "productTypes": ["GAS"],
+                    "companies": ["EXN", "CHV", "EXN"],
+                    "companyParties": ["shipper", "supCon", "tankage"],
+                    "subscribers": ["CPL"]
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:5000/api/ticket/search
+            name: Allowed - Ticket Search (Alice)
+            meta:
+              id: req_6f2acd9ab8f94ebda938a97dd9ca842c
+              created: 1740596363064
+              modified: 1746567105994
+              isPrivate: false
+              sortKey: -1740596361478
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+                    "principal": "alice@transport4.com",
+                    "action": "ticket_view",
+                    "requestType": "generate_query",
+                    "unknown": "tickets",
+                    "locations": ["DVD"],
+                    "productTypes": ["GAS"],
+                    "companies": ["P66", "EXN", "CHV"],
+                    "companyParties": ["shipper", "subCon", "tankage"],
+                    "subscribers": ["KMO"]
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: http://localhost:5000/api/nomination/search
+            name: Denied - Nomination Search (Alice)
+            meta:
+              id: req_b51c375d3f224641b51d04255b7f7129
+              created: 1740596363065
+              modified: 1746567111945
+              isPrivate: false
+              sortKey: -1740596361477
+            method: POST
+            body:
+              mimeType: application/json
+              text: >-
+                {
+                    "principal": "alice@transport4.com",
+                    "action": "nomination_view", {# Alice does not inherit this action, so no query is generated #}
+                    "requestType": "generate_query",
+                    "unknown": "nominations",
+                    "locations": ["DVD"],
+                    "productTypes": ["GAS"],
+                    "companies": ["P66", "EXN", "CHV"],
+                    "companyParties": ["shipper", "subCon", "tankage"],
+                    "subscribers": ["KMO"]
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Directory
+        meta:
+          id: fld_ac39bc7354b0407ab22fe67e4fe4c741
+          created: 1740777259671
+          modified: 1746564105667
+          sortKey: -1740596361604
+        children:
+          - name: User
+            meta:
+              id: fld_36d604b4f3904fb0bcac6f708e68e244
+              created: 1740777299789
+              modified: 1740777299789
+              sortKey: -1740777299789
+            children:
+              - url: http://localhost:5000/api/user
+                name: Create/Update User
+                meta:
+                  id: req_d4a6a32958cb44a6ba0ba2cc4f8ad7c3
+                  created: 1740608064903
+                  modified: 1746717125750
+                  isPrivate: false
+                  sortKey: -1740777306331
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                    	"user_id": "steve@transport4.com",
+                    	"display_name": "steve",
+                    	"email": "steve@transport4.com",
+                    	"picture": "https://live.staticflickr.com/1069/563806059_813e90acee_b.jpg",
+                    	"pss_rights": ["pss_nomination_create", "pss_nomination_subscriber_confirm"]
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/user
+                name: Delete User
+                meta:
+                  id: req_1a238fbb7b5d40d18a92ca84404dfbc2
+                  created: 1740671612094
+                  modified: 1746716322324
+                  isPrivate: false
+                  sortKey: -1740777306231
+                method: DELETE
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"user_id": "steve@transport4.com"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: User Permission
+            meta:
+              id: fld_8a3c82d466d54153abf3c7c2e83f0904
+              created: 1740777328909
+              modified: 1740777328909
+              sortKey: -1740777328909
+            children:
+              - url: http://localhost:5000/api/user_permission
+                name: Create/Update User Permission
+                meta:
+                  id: req_6d8b6877161b43b5bddfafaa85d7da02
+                  created: 1740677037536
+                  modified: 1746716217696
+                  isPrivate: false
+                  sortKey: -1740777334012
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"company": "EXN",
+                    	"subscriber": "KMO",
+                    	"locations": ["STL", "SAN"],
+                    	"product_types": ["GAS", "KER"],
+                    	"role": "scheduler"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/user_permission
+                name: Delete User Permission
+                meta:
+                  id: req_b2c41b806ea84c04bdf12aa01eea01f1
+                  created: 1740689222665
+                  modified: 1746716291303
+                  isPrivate: false
+                  sortKey: -1740777333712
+                method: DELETE
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"user_permission_id": "EXN-KMO-scheduler"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/user_permission/grant
+                name: Grant User Permission
+                meta:
+                  id: req_edaf77c2081b4fccbc4e653493eb60dc
+                  created: 1740689664779
+                  modified: 1746716253042
+                  isPrivate: false
+                  sortKey: -1740777333912
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"user_id": "steve@transport4.com",
+                    	"user_permission_id": "EXN-KMO-scheduler"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/user_permission/revoke
+                name: Revoke User Permission
+                meta:
+                  id: req_e41417f4fc66472582c7a30d4ea10471
+                  created: 1740690349205
+                  modified: 1746716270706
+                  isPrivate: false
+                  sortKey: -1740777333812
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"user_id": "steve@transport4.com",
+                    	"user_permission_id": "EXN-KMO-scheduler"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Company
+            meta:
+              id: fld_57f030ad9fb5420c8fcbf65aec01e177
+              created: 1740777353525
+              modified: 1740777353525
+              sortKey: -1740777353525
+            children:
+              - url: http://localhost:5000/api/company
+                name: Delete Company
+                meta:
+                  id: req_ead70a057d184525ab8a78ffbdef8c4b
+                  created: 1740777364073
+                  modified: 1746716197914
+                  isPrivate: false
+                  sortKey: -1740777373609
+                method: DELETE
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"company_id": "SFO"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/company
+                name: Create/Update Company
+                meta:
+                  id: req_7a4db49d12e946a090ec534d146a4217
+                  created: 1740777381840
+                  modified: 1746716188529
+                  isPrivate: false
+                  sortKey: -1740777373709
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"company_id": "SFO",
+                    	"display_name": "SFO"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Subscriber
+            meta:
+              id: fld_69da34e3fa5846f6b1a07a3a646de641
+              created: 1740781565560
+              modified: 1740781565560
+              sortKey: -1740781565560
+            children:
+              - url: http://localhost:5000/api/subscriber
+                name: Create/Update Subscriber
+                meta:
+                  id: req_f090b607ac6e4e18b266bb71797a29df
+                  created: 1740781579236
+                  modified: 1746716132137
+                  isPrivate: false
+                  sortKey: -1740781583392
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"subscriber_id": "CCP",
+                    	"display_name": "CCP"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/subscriber
+                name: Delete Subscriber
+                meta:
+                  id: req_df73b90e0d33405789f15332caec7578
+                  created: 1740781595713
+                  modified: 1746716168349
+                  isPrivate: false
+                  sortKey: -1740781583492
+                method: DELETE
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"subscriber_id": "CCP"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/subscriber/grant_action_set
+                name: Grant Action Set
+                meta:
+                  id: req_2b7e942bd55a49ce8767c48ac86f48e6
+                  created: 1740781685265
+                  modified: 1746716145555
+                  isPrivate: false
+                  sortKey: -1740781583592
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"action_set_id": "nominations",
+                    	"subscriber_id": "CCP"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/subscriber/revoke_action_set
+                name: Revoke Action Set
+                meta:
+                  id: req_fc40a4ca94d64fb49a7b648537a09fdb
+                  created: 1740781697938
+                  modified: 1746716159723
+                  isPrivate: false
+                  sortKey: -1740781583692
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"action_set_id": "nominations",
+                    	"subscriber_id": "CCP"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Action Set
+            meta:
+              id: fld_c41cb9afba764dfbbc738f989717dfe8
+              created: 1740782862725
+              modified: 1740782862725
+              sortKey: -1740782862725
+            children:
+              - url: http://localhost:5000/api/action_set
+                name: Create/Update Action Set
+                meta:
+                  id: req_feb0bdf097124862a7d31e03496d018f
+                  created: 1740782878477
+                  modified: 1746716014936
+                  isPrivate: false
+                  sortKey: -1740782886201
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"action_set_id": "drafts",
+                    	"display_name": "drafts"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/action_set
+                name: Delete Action Set
+                meta:
+                  id: req_7b08a5196bdb401f9f95ff1c11fe8c52
+                  created: 1740782893815
+                  modified: 1746716095186
+                  isPrivate: false
+                  sortKey: -1740782886301
+                method: DELETE
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"action_set_id": "drafts"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/action_set/grant_action
+                name: "Grant Action "
+                meta:
+                  id: req_631cad78282e4bd0bb79590abab65726
+                  created: 1740782917182
+                  modified: 1746716032883
+                  isPrivate: false
+                  sortKey: -1740782886401
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"action_id": "first",
+                    	"action_set_id": "drafts"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/action_set/revoke_action
+                name: Revoke Action
+                meta:
+                  id: req_a8485a01541d441c8c96ba1a4104c80d
+                  created: 1740782942307
+                  modified: 1746716088824
+                  isPrivate: false
+                  sortKey: -1740782886501
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"action_id": "first",
+                    	"action_set_id": "drafts"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Role
+            meta:
+              id: fld_6f4c8b9fb5fd4f90a0ee976c20754a65
+              created: 1740783315720
+              modified: 1740783315720
+              sortKey: -1740783315720
+            children:
+              - url: http://localhost:5000/api/role
+                name: Create/Update Role
+                meta:
+                  id: req_ef860738cee54f53924cb6d396e80377
+                  created: 1740783386600
+                  modified: 1746714892595
+                  isPrivate: false
+                  sortKey: -1740783392542
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"role_id": "maintainer",
+                    	"display_name": "maintainer"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/role
+                name: Delete Role
+                meta:
+                  id: req_67db127af875400aaec65e63e434848c
+                  created: 1740783401075
+                  modified: 1746715998752
+                  isPrivate: false
+                  sortKey: -1740783392642
+                method: DELETE
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"role_id": "maintainer"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/role/grant_action
+                name: "Grant Action "
+                meta:
+                  id: req_9092bcd5678346d2a9f69b0a3a8bc832
+                  created: 1740783408579
+                  modified: 1746714912175
+                  isPrivate: false
+                  sortKey: -1740783392742
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"action_id": "maintainence",
+                    	"role_id": "maintainer"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/role/revoke_action
+                name: Revoke Action
+                meta:
+                  id: req_93f79813b49a47b5b5088f4a0b4c04f0
+                  created: 1740783413916
+                  modified: 1746715981680
+                  isPrivate: false
+                  sortKey: -1740783392692
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"action_id": "maintainence",
+                    	"role_id": "maintainer"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Action
+            meta:
+              id: fld_5e8302e51b5d47b49540fc788f7d7989
+              created: 1740783814810
+              modified: 1740783814810
+              sortKey: -1740783814810
+            children:
+              - url: http://localhost:5000/api/action
+                name: Create/Update Action
+                meta:
+                  id: req_c6665e240f6b40eda6cbf19bd8e270d7
+                  created: 1740783824473
+                  modified: 1746716119498
+                  isPrivate: false
+                  sortKey: -1740783834009
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"action_id": "maintainence",
+                    	"display_name": "maintainence"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/action
+                name: Delete Action
+                meta:
+                  id: req_4352da27969e49d6914bd81c0b98938c
+                  created: 1740783838960
+                  modified: 1746714878119
+                  isPrivate: false
+                  sortKey: -1740783834109
+                method: DELETE
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"action_id": "maintainence"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Location
+            meta:
+              id: fld_b18c7085b76f40d691ea4dcf263c0eba
+              created: 1740784271908
+              modified: 1740784271908
+              sortKey: -1740784271908
+            children:
+              - url: http://localhost:5000/api/location
+                name: Create/Update Location
+                meta:
+                  id: req_eaf48c30dda04f03ad89726ed0f84350
+                  created: 1740784280354
+                  modified: 1746714842019
+                  isPrivate: false
+                  sortKey: -1740784286392
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"location_id": "PHX",
+                    	"display_name": "PHX"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/location
+                name: Delete Location
+                meta:
+                  id: req_6351c76cef5947f5aaec5fd382922eb7
+                  created: 1740784293948
+                  modified: 1746714852653
+                  isPrivate: false
+                  sortKey: -1740784286492
+                method: DELETE
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"location_id": "PHX"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: Product Type
+            meta:
+              id: fld_cfb35580cdf047e1b37d12b80a1e7d10
+              created: 1740784629832
+              modified: 1740784629832
+              sortKey: -1740784629832
+            children:
+              - url: http://localhost:5000/api/product_type
+                name: Create/Update Product Type
+                meta:
+                  id: req_5b12cf4f0fc84038967532af49b9c361
+                  created: 1740784639800
+                  modified: 1746714497793
+                  isPrivate: false
+                  sortKey: -1740784646149
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"product_type_id": "METH",
+                    	"display_name": "METH"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/product_type
+                name: Delete Product Type
+                meta:
+                  id: req_483b5f2cd43e4896b1f237e3ae6d11b5
+                  created: 1740784654392
+                  modified: 1746714686034
+                  isPrivate: false
+                  sortKey: -1740784646249
+                method: DELETE
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"product_type_id": "METH"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+          - name: PSS Right
+            meta:
+              id: fld_d23a1039f99e46fa99f7b2baa7cdb721
+              created: 1740784917249
+              modified: 1740784925397
+              sortKey: -1740784917249
+            children:
+              - url: http://localhost:5000/api/pss_right
+                name: Create/Update PSS Right
+                meta:
+                  id: req_2a9881ae83dd48628d1e883a947e8be8
+                  created: 1740784933429
+                  modified: 1746567152245
+                  isPrivate: false
+                  sortKey: -1740784938606
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"pss_right_id": "pss_nomination_maintain",
+                    	"display_name": "pss_nomination_maintain"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: http://localhost:5000/api/pss_right
+                name: Delete PSS Right
+                meta:
+                  id: req_659e39d2fb674a788ec3e2c7f8ba256d
+                  created: 1740784945619
+                  modified: 1746714371680
+                  isPrivate: false
+                  sortKey: -1740784938506
+                method: DELETE
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                    	"pss_right_id": "pss_nomination_maintain"
+                    }
+                headers:
+                  - name: Content-Type
+                    value: application/json
+                  - name: User-Agent
+                    value: insomnia/10.3.1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+  - name: Topaz Edge Authorizers
+    meta:
+      id: fld_797c9160847a4ad2b8511767b1a0cbdf
+      created: 1740596384827
+      modified: 1746564124965
+      sortKey: -1740596383759
+    children:
+      - name: Authorizer 1
+        meta:
+          id: fld_cf20b5f9f0ff44ebb5b258f6eeca11db
+          created: 1746563798695
+          modified: 1746563798695
+          sortKey: -1746563798695
+        children:
+          - name: Allow/Deny Requests
+            meta:
+              id: fld_f8abf7fa2ed94088a31fb267d897aa04
+              created: 1746562511438
+              modified: 1746563834507
+              sortKey: -1746563804244
+            children:
+              - name: Happy Path / Default
+                meta:
+                  id: fld_bd2ac451e5c749e39f078c5f1d818bd7
+                  created: 1746562511440
+                  modified: 1746562511440
+                  sortKey: -1740596383757
+                children:
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Allowed
+                    meta:
+                      id: req_b42b02d381de4ce8acc62edf1eee19b3
+                      created: 1746562511441
+                      modified: 1746563398885
+                      isPrivate: false
+                      sortKey: -1740596383756
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: |-
+                        
+                        {
+                          "identity_context": {
+                            "identity": "bob",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_create",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_27dd4f5a25bc49b0b4315c2e1f267732
+                        disabled: true
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_320dc9a3f0a24134ac4028b3d4be9350
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Actions
+                meta:
+                  id: fld_2fb4453e16404b7fb05b4b4a25ff9e18
+                  created: 1746562511443
+                  modified: 1746562511443
+                  sortKey: -1740596383755
+                children:
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Denied - Action Not Inherited
+                    meta:
+                      id: req_1bc5e3dc7a6449f9b3d2cd7dd64ec1df
+                      created: 1746562511446
+                      modified: 1746563587648
+                      isPrivate: false
+                      sortKey: -1740596383754
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "alice@transport4.com",
+                            "action": "nomination_view", {# Alice is an inspector, who by default only gets 'nomination_view' and 'ticket_view', but her subscriber (KMO) only has ticket permissions, thus only 'ticket_view' works for Alice. #}
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["P66", "P66", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["KMO"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_39b59e1254014ec28d3e3997adf505af
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_6da15545fd404b39955803daaecd7094
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_202c0e0dac6e46c0b08d1a705df4cfe1
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Denied - Action Not Assigned To Any Roles Or Subscribers
+                    meta:
+                      id: req_9b644ffb4042486c938b81002af5b32f
+                      created: 1746562511448
+                      modified: 1746563600898
+                      isPrivate: false
+                      sortKey: -1740596383753
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "admin_add_application", {# This action is not granted to any subscribers #}
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_ac8be400228646ce96102dbdfb0f86f1
+                      - name: asserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_95203baa075241799626ab6d6b5ef2eb
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_156d4fb004af48cda4685ea457482b44
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: PSS Rights
+                meta:
+                  id: fld_722836858948420eb0cdb9e176a39f55
+                  created: 1746562511450
+                  modified: 1746562511450
+                  sortKey: -1740596383752
+                children:
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Denied - Missing PSS Right For Action
+                    meta:
+                      id: req_d133ac19efa4417098fa12dc46025421
+                      created: 1746562511451
+                      modified: 1746563606043
+                      isPrivate: false
+                      sortKey: -1740596383751
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_subscriber_confirm", {# This action requires the pss right 'pss_nomination_subscriber_confirm' which 'bob' does not have #}
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "EXN", "CHV", "EXN"],
+                            "companyParties": ["carrier", "shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_095932aea7b54fc2bb4b6b40fc2029ea
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_d05bcf598cd246299619ea541e2cb377
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_10a8747673a444fa9cee96a8d754a716
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Company Party
+                meta:
+                  id: fld_fc9aa80566794f55a4d79fe37493a8b7
+                  created: 1746562511453
+                  modified: 1746562511453
+                  sortKey: -1740596383750
+                children:
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Denied - Shipper Party Required By Action Not Inherited By Principal
+                    meta:
+                      id: req_8285368fc2404802851577c8c6ce4176
+                      created: 1746562511455
+                      modified: 1746563612595
+                      isPrivate: false
+                      sortKey: -1740596383749
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_edit",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["supCon", "shipper", "tankage"], {# this action 'nomination_edit' requires 'shipper' party to be inherited but 'bob' does NOT have permissions for 'CHV' #}
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_980c11b3b5db4fe5a183d83120ebec95
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_9714c1bf0b154ee68919c7beb9c427bd
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_8f6f06c14ee943bf858c96465681a9ef
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Denied - Tankage Party Required By Action Not Inherited By Principal
+                    meta:
+                      id: req_bfb3816673f6499cafc6f7886ac58c27
+                      created: 1746562511456
+                      modified: 1746563617127
+                      isPrivate: false
+                      sortKey: -1740596383748
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_tankage_confirm",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "EXN", "PHI"],
+                            "companyParties": ["supCon", "shipper", "tankage"], {# this action 'nomination_tankage_confirm' requires 'tankage' party to be inherited but 'bob' does NOT have permissions for 'PHI' #}
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_6070a550c2c247d3bd1c82cb390d2cda
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_ec713e31b3044712b8eb486643b8b446
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_5faf54c57e444b0ba3e1cb238c4cb8b9
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Denied - Action Does Not Require A Company Party But No Companies Are
+                      Inherited
+                    meta:
+                      id: req_c0d752323d7540edbad6bdd0511ea236
+                      created: 1746562511458
+                      modified: 1746563623108
+                      isPrivate: false
+                      sortKey: -1740596383747
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_view", {# this action 'nomination_view' does NOT require a specific party to be inherited, but no companies requested below are inheritied. #}
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["PHI", "CHV", "MOB"], {# 'bob' only inherits from 'EXN' so without 'EXN' in this list, he will be denied #}
+                            "companyParties": ["supCon", "shipper", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_0e6e1daf3d17412ca0c974b325869f7c
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_2c7510b5392349f9b2f0a207d6037acd
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_5c080aad685948908260b4792b4d4a24
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Allowed - Action Does Not Require A Company Party But TPT Company Is
+                      Inherited
+                    meta:
+                      id: req_2c5c6a97210247ffac73a8743bc9d587
+                      created: 1746562511459
+                      modified: 1746563629238
+                      isPrivate: false
+                      sortKey: -1740596383746
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_view", {# this action 'nomination_view' does NOT require a specific party to be inherited #}
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["PHI", "CHV", "MOB", "KMO", "EXN"], {# 'bob' only inherits from 'EXN' so as long as 'EXN' is somewhere in this list, it will be allowed. #}
+                            "companyParties": ["supCon", "shipper", "tankage", "tpt", "tpt"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_309f5f75e0494ab281b7f6f54d170427
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_026f513fb9144271bdcb8a8b854cdede
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_c07702662763490e8037c1acb3821d82
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Company
+                meta:
+                  id: fld_887d7d4e387c44f9958fb1d7854abd9f
+                  created: 1746562511461
+                  modified: 1746562511461
+                  sortKey: -1740596383745
+                children:
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Denied - No Principal Permissions For Company
+                    meta:
+                      id: req_084eabb14c354d228de49dc1002389c4
+                      created: 1746562511464
+                      modified: 1746563635751
+                      isPrivate: false
+                      sortKey: -1740596383744
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_view",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["KMO", "CHV", "PHI"], {# This principal has no permissions associated with these companis, but does for 'EXN' #}
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_c8d1cd27e07e4865b98a61928f35f865
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_a89c623afc364bd083b0996bde84facb
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_29cfb55b666349f6a0d01b5fde4a8994
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Allowed - Principal Permissions For Some But Not All Companies
+                    meta:
+                      id: req_119f5de88331411da82fe11c2a03a1b5
+                      created: 1746562511465
+                      modified: 1746563641133
+                      isPrivate: false
+                      sortKey: -1740596383743
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_create",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "P66"], {# This principal has permissions associated with only one of these companies, but only one is needed (possibly for specific party) #}
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_075b715472124ffb988dd4aa14ae4dc9
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_0703f19664c04d9fa4d5f6ab419dffb5
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_a4006b3d89bf4bb9b9788bd7ea9ae939
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Subscriber
+                meta:
+                  id: fld_10e58d7897084830b1a23f21ba9038fa
+                  created: 1746562511466
+                  modified: 1746562511466
+                  sortKey: -1740596383742
+                children:
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Denied - No Principal Permissions For Subscriber
+                    meta:
+                      id: req_59164beb3eff49e58e4fbe88ee5c3c78
+                      created: 1746562511467
+                      modified: 1746563646574
+                      isPrivate: false
+                      sortKey: -1740596383741
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_create",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["MOB"] {# This principal has no permissions associated with this subscriber, but does with 'CPL' #}
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_c35934b91f7c4f6b867309293cad4d97
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_8a5b4ade20a4402e8de00900a8b3bcba
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_b9cd21b915eb42bb904a8b94aff0cfea
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Product Type
+                meta:
+                  id: fld_70149587bb374ac589b48a5c9c5e647c
+                  created: 1746562511470
+                  modified: 1746562511470
+                  sortKey: -1740596383740
+                children:
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Denied - Product Type Not Inherited From Companies
+                    meta:
+                      id: req_0d570cafd2724c87a364b0b141e65c0e
+                      created: 1746562511471
+                      modified: 1746563652670
+                      isPrivate: false
+                      sortKey: -1740596383739
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_create",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["KER"], {# This product type is not one of any inherited companies product types, but 'GAS' or 'JET' are. #}
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_66760a847bc94cc89cb1ce19f5f01018
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_5b8311b6127d4b18bec632fe48483579
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_917bee1b44314461b1c3b7f6af3b6aa4
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Allowed - One But Not All Product Types Inherited From Companies
+                    meta:
+                      id: req_ba54096099d141bca2294bdc42907f0e
+                      created: 1746562511473
+                      modified: 1746563656805
+                      isPrivate: false
+                      sortKey: -1740596383738
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_edit",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"], 
+                            "productTypes": ["GAS", "KER"], {# One product type (GAS) is inherited from a company, the other (KER) is unknown #}
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_72a2f44d2f7744f1b5f297897416628a
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_ed36f7e4e5e14b8ba01ba6f016289113
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_efdd118fffcf42a2975cdf5167cc00a8
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Location
+                meta:
+                  id: fld_ce1e29e75d1e4cb69dd236dcb9a46129
+                  created: 1746562511474
+                  modified: 1746562511474
+                  sortKey: -1740596383737
+                children:
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Denied - Location Not Inherited From Companies
+                    meta:
+                      id: req_7309f42e6a29426caf51cdb948737414
+                      created: 1746562511475
+                      modified: 1746563661891
+                      isPrivate: false
+                      sortKey: -1740596383736
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_edit",
+                            "requestType": "evaluate",
+                            "locations": ["ATL"], {# This location is not one of any inherited companies locations, but 'DVD' is. #}
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_d0dd1aa055334c3f8de34a17623d744d
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_733aa95730d54059bae06d94cf7d56f6
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_692102cf89ce400bb6fea8c7e979c548
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:29393/api/v2/authz/is
+                    name: Allowed - One But Not All Locations Inherited From Companies
+                    meta:
+                      id: req_2edb6760ff6d491b83802e3467002a41
+                      created: 1746562511476
+                      modified: 1746563666112
+                      isPrivate: false
+                      sortKey: -1740596383735
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_edit",
+                            "requestType": "evaluate",
+                            "locations": ["DVD", "ATL"], {# One location (DVD) is inherited from a subscriber, the other (ATL) is unknown #}
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_e54a46c5fcc64fa994059bd73c1f62ac
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_b79e53028e5143da8a1f5008d13d927c
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_7626cef08aea43409242cb483c983d2c
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+          - name: SQL Generation Requests
+            meta:
+              id: fld_73226e2aa8fc450faef23454320ee953
+              created: 1746563821432
+              modified: 1746563825206
+              sortKey: -1746563804144
+            children:
+              - url: https://localhost:29393/api/v2/authz/compile
+                name: Allowed - Nomination Search (Bob)
+                meta:
+                  id: req_598bb36746504b5a87cf24fdbeea5748
+                  created: 1746563821434
+                  modified: 1746563845828
+                  isPrivate: false
+                  sortKey: -1740596383733
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                      "identity_context": {
+                        "identity": "bob@transport4.com",
+                        "type": "IDENTITY_TYPE_NONE"
+                      },
+                      "options": {
+                        "instrument": false,
+                        "metrics": false,
+                        "trace": "TRACE_LEVEL_UNKNOWN",
+                        "trace_summary": false
+                      },
+                      "policy_context": {
+                        "decisions": [
+                          "allow"
+                        ],
+                        "path": "rebac.check"
+                      },
+                      "policy_instance": {
+                        "instance_label": "policy-poc",
+                        "name": "policy-poc"
+                      },
+                      "query": "data.rebac.check.allow==true",
+                      "resource_context": {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_view",
+                        "requestType": "generate_query",
+                        "unknown": "nominations",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "CHV", "EXN"],
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                      },
+                      "unknowns": [
+                        "data.nominations"
+                      ]
+                    }
+                headers:
+                  - name: Authorization
+                    value: basic <fill in>
+                    id: pair_985433db988848ca92ebb1c51404a6c0
+                  - name: aserto-tenant-id
+                    value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                    id: pair_222613d74e9843df9983e780fab9ea82
+                  - name: Content-Type
+                    value: application/json
+                    id: pair_617a60a31387447699d72f08d6cdbc2f
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: https://localhost:29393/api/v2/authz/compile
+                name: Allowed - Ticket Search (Alice)
+                meta:
+                  id: req_d5f3092c66684e9ab226b4cd904b58b0
+                  created: 1746563821435
+                  modified: 1746563883594
+                  isPrivate: false
+                  sortKey: -1740596383732
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                      "identity_context": {
+                        "identity": "bob@transport4.com",
+                        "type": "IDENTITY_TYPE_NONE"
+                      },
+                      "options": {
+                        "instrument": false,
+                        "metrics": false,
+                        "trace": "TRACE_LEVEL_UNKNOWN",
+                        "trace_summary": false
+                      },
+                      "policy_context": {
+                        "decisions": [
+                          "allow"
+                        ],
+                        "path": "rebac.check"
+                      },
+                      "policy_instance": {
+                        "instance_label": "policy-poc",
+                        "name": "policy-poc"
+                      },
+                      "query": "data.rebac.check.allow==true",
+                      "resource_context": {
+                        "principal": "alice@transport4.com",
+                        "action": "ticket_view",
+                        "requestType": "generate_query",
+                        "unknown": "tickets",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["P66", "EXN", "CHV"],
+                        "companyParties": ["shipper", "subCon", "tankage"],
+                        "subscribers": ["KMO"]
+                      },
+                      "unknowns": [
+                        "data.tickets"
+                      ]
+                    }
+                headers:
+                  - name: Authorization
+                    value: basic <fill in>
+                    id: pair_7619866db38f4416a85e57d730b8de32
+                  - name: aserto-tenant-id
+                    value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                    id: pair_99c79984fe35455fa4919fe0418c58f2
+                  - name: Content-Type
+                    value: application/json
+                    id: pair_ab5b498b8503448482a74e01baededc1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: https://localhost:29393/api/v2/authz/compile
+                name: Denied - Nomination Search (Alice)
+                meta:
+                  id: req_e28ddf8e35944361ad18185fd6eaba59
+                  created: 1746563821436
+                  modified: 1746563889119
+                  isPrivate: false
+                  sortKey: -1740596383731
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                      "identity_context": {
+                        "identity": "bob@transport4.com",
+                        "type": "IDENTITY_TYPE_NONE"
+                      },
+                      "options": {
+                        "instrument": false,
+                        "metrics": false,
+                        "trace": "TRACE_LEVEL_UNKNOWN",
+                        "trace_summary": false
+                      },
+                      "policy_context": {
+                        "decisions": [
+                          "allow"
+                        ],
+                        "path": "rebac.check"
+                      },
+                      "policy_instance": {
+                        "instance_label": "policy-poc",
+                        "name": "policy-poc"
+                      },
+                      "query": "data.rebac.check.allow==true",
+                      "resource_context": {
+                        "principal": "alice@transport4.com",
+                        "action": "nomination_view", {# Alice does not inherit this action, so no query is generated #}
+                        "requestType": "generate_query",
+                        "unknown": "nominations",
+                        "context": {
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["P66", "EXN", "CHV"],
+                            "companyParties": ["shipper", "subCon", "tankage"],
+                            "subscribers": ["KMO"]
+                        }
+                      },
+                      "unknowns": [
+                        "data.nominations"
+                      ]
+                    }
+                headers:
+                  - name: Authorization
+                    value: basic <fill in>
+                    id: pair_79f7ab4728a849aba589cb7b67f0c6be
+                  - name: aserto-tenant-id
+                    value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                    id: pair_02995ef97a8c4b5cad808b9da80aa39f
+                  - name: Content-Type
+                    value: application/json
+                    id: pair_73662058eb38406e91f2070a108457b2
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+      - name: Authorizer 2
+        meta:
+          id: fld_591ee9d58778462090105e8ef0717d65
+          created: 1746564004848
+          modified: 1746564004848
+          sortKey: -1746564004848
+        children:
+          - name: Allow/Deny Requests
+            meta:
+              id: fld_752656c0a7c04eaf88e74476e9d800b3
+              created: 1740596384828
+              modified: 1746564018136
+              sortKey: -1746564008490
+            children:
+              - name: Happy Path / Default
+                meta:
+                  id: fld_8a1403a5c42844b3a4665af43cc4ce97
+                  created: 1740596384832
+                  modified: 1740596384832
+                  sortKey: -1740596383757
+                children:
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Allowed
+                    meta:
+                      id: req_5d36896196e84e0c93f2c425f459a937
+                      created: 1740596384835
+                      modified: 1746563685541
+                      isPrivate: false
+                      sortKey: -1740596383756
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: |-
+                        
+                        {
+                          "identity_context": {
+                            "identity": "bob",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_create",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_27dd4f5a25bc49b0b4315c2e1f267732
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_0424571dbffa424da5bc27868dd863fa
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_320dc9a3f0a24134ac4028b3d4be9350
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Actions
+                meta:
+                  id: fld_544aa5e72668486592cf427d89c6592f
+                  created: 1740596384879
+                  modified: 1740596384879
+                  sortKey: -1740596383755
+                children:
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Denied - Action Not Inherited
+                    meta:
+                      id: req_7bdeec76b04145388c16442ba0a5a2e6
+                      created: 1740596384883
+                      modified: 1746563698406
+                      isPrivate: false
+                      sortKey: -1740596383754
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "alice@transport4.com",
+                            "action": "nomination_view", {# Alice is an inspector, who by default only gets 'nomination_view' and 'ticket_view', but her subscriber (KMO) only has ticket permissions, thus only 'ticket_view' works for Alice. #}
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["P66", "P66", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["KMO"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_39b59e1254014ec28d3e3997adf505af
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_6da15545fd404b39955803daaecd7094
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_202c0e0dac6e46c0b08d1a705df4cfe1
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Denied - Action Not Assigned To Any Roles Or Subscribers
+                    meta:
+                      id: req_49bf6ad348cc4836a3d5a0b44c409947
+                      created: 1740596384889
+                      modified: 1746563703265
+                      isPrivate: false
+                      sortKey: -1740596383753
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "admin_add_application", {# This action is not granted to any subscribers #}
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_ac8be400228646ce96102dbdfb0f86f1
+                      - name: asserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_95203baa075241799626ab6d6b5ef2eb
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_156d4fb004af48cda4685ea457482b44
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: PSS Rights
+                meta:
+                  id: fld_433b93b5825242c8aec64d10add11455
+                  created: 1740596384893
+                  modified: 1740596384893
+                  sortKey: -1740596383752
+                children:
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Denied - Missing PSS Right For Action
+                    meta:
+                      id: req_3450b4d6ab7742008e05b458f2a4c1db
+                      created: 1740596384895
+                      modified: 1746563707538
+                      isPrivate: false
+                      sortKey: -1740596383751
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_subscriber_confirm", {# This action requires the pss right 'pss_nomination_subscriber_confirm' which 'bob' does not have #}
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "EXN", "CHV", "EXN"],
+                            "companyParties": ["carrier", "shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_095932aea7b54fc2bb4b6b40fc2029ea
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_d05bcf598cd246299619ea541e2cb377
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_10a8747673a444fa9cee96a8d754a716
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Company Party
+                meta:
+                  id: fld_e8c6e88c25af4ccf90d847a0c7e875d3
+                  created: 1740596384896
+                  modified: 1740596384896
+                  sortKey: -1740596383750
+                children:
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Denied - Shipper Party Required By Action Not Inherited By Principal
+                    meta:
+                      id: req_f0dc0903055847dd9badc349c2127663
+                      created: 1740596384897
+                      modified: 1746563712613
+                      isPrivate: false
+                      sortKey: -1740596383749
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_edit",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["supCon", "shipper", "tankage"], {# this action 'nomination_edit' requires 'shipper' party to be inherited but 'bob' does NOT have permissions for 'CHV' #}
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_980c11b3b5db4fe5a183d83120ebec95
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_9714c1bf0b154ee68919c7beb9c427bd
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_8f6f06c14ee943bf858c96465681a9ef
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Denied - Tankage Party Required By Action Not Inherited By Principal
+                    meta:
+                      id: req_4ccde60c313c448d935d5b3bc7f0ba3c
+                      created: 1740596384899
+                      modified: 1746563717224
+                      isPrivate: false
+                      sortKey: -1740596383748
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_tankage_confirm",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "EXN", "PHI"],
+                            "companyParties": ["supCon", "shipper", "tankage"], {# this action 'nomination_tankage_confirm' requires 'tankage' party to be inherited but 'bob' does NOT have permissions for 'PHI' #}
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_6070a550c2c247d3bd1c82cb390d2cda
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_ec713e31b3044712b8eb486643b8b446
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_5faf54c57e444b0ba3e1cb238c4cb8b9
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Denied - Action Does Not Require A Company Party But No Companies Are
+                      Inherited
+                    meta:
+                      id: req_c7dda72716a54193aafa40fd9808d8a5
+                      created: 1740596384902
+                      modified: 1746563721272
+                      isPrivate: false
+                      sortKey: -1740596383747
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_view", {# this action 'nomination_view' does NOT require a specific party to be inherited, but no companies requested below are inheritied. #}
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["PHI", "CHV", "MOB"], {# 'bob' only inherits from 'EXN' so without 'EXN' in this list, he will be denied #}
+                            "companyParties": ["supCon", "shipper", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_0e6e1daf3d17412ca0c974b325869f7c
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_2c7510b5392349f9b2f0a207d6037acd
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_5c080aad685948908260b4792b4d4a24
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Allowed - Action Does Not Require A Company Party But TPT Company Is
+                      Inherited
+                    meta:
+                      id: req_8f79a603a11e4be09b0272bccd1a052e
+                      created: 1740596384903
+                      modified: 1746563725585
+                      isPrivate: false
+                      sortKey: -1740596383746
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_view", {# this action 'nomination_view' does NOT require a specific party to be inherited #}
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["PHI", "CHV", "MOB", "KMO", "EXN"], {# 'bob' only inherits from 'EXN' so as long as 'EXN' is somewhere in this list, it will be allowed. #}
+                            "companyParties": ["supCon", "shipper", "tankage", "tpt", "tpt"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_309f5f75e0494ab281b7f6f54d170427
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_026f513fb9144271bdcb8a8b854cdede
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_c07702662763490e8037c1acb3821d82
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Company
+                meta:
+                  id: fld_1f1ec447d0344b01a51070dd17921216
+                  created: 1740596384905
+                  modified: 1740596384905
+                  sortKey: -1740596383745
+                children:
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Denied - No Principal Permissions For Company
+                    meta:
+                      id: req_79cf91b17e7d4748b074d98f59d3014c
+                      created: 1740596384908
+                      modified: 1746563730023
+                      isPrivate: false
+                      sortKey: -1740596383744
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_view",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["KMO", "CHV", "PHI"], {# This principal has no permissions associated with these companis, but does for 'EXN' #}
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_c8d1cd27e07e4865b98a61928f35f865
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_a89c623afc364bd083b0996bde84facb
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_29cfb55b666349f6a0d01b5fde4a8994
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Allowed - Principal Permissions For Some But Not All Companies
+                    meta:
+                      id: req_9dd6a497b3564e7f8d131bbba4e9266a
+                      created: 1740596384909
+                      modified: 1746563734625
+                      isPrivate: false
+                      sortKey: -1740596383743
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_create",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "P66"], {# This principal has permissions associated with only one of these companies, but only one is needed (possibly for specific party) #}
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_075b715472124ffb988dd4aa14ae4dc9
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_0703f19664c04d9fa4d5f6ab419dffb5
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_a4006b3d89bf4bb9b9788bd7ea9ae939
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Subscriber
+                meta:
+                  id: fld_924f39e1b2df446a985ef5d0b87892eb
+                  created: 1740596384911
+                  modified: 1740596384911
+                  sortKey: -1740596383742
+                children:
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Denied - No Principal Permissions For Subscriber
+                    meta:
+                      id: req_fddfe1cbd31c40c48916c31ee6623441
+                      created: 1740596384912
+                      modified: 1746563738617
+                      isPrivate: false
+                      sortKey: -1740596383741
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_create",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["MOB"] {# This principal has no permissions associated with this subscriber, but does with 'CPL' #}
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_c35934b91f7c4f6b867309293cad4d97
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_8a5b4ade20a4402e8de00900a8b3bcba
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_b9cd21b915eb42bb904a8b94aff0cfea
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Product Type
+                meta:
+                  id: fld_e60502f6158f45789663d607a168e25e
+                  created: 1740596384914
+                  modified: 1740596384914
+                  sortKey: -1740596383740
+                children:
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Denied - Product Type Not Inherited From Companies
+                    meta:
+                      id: req_441de259b0634d52aba504d5958e30ed
+                      created: 1740596384916
+                      modified: 1746563742848
+                      isPrivate: false
+                      sortKey: -1740596383739
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_create",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"],
+                            "productTypes": ["KER"], {# This product type is not one of any inherited companies product types, but 'GAS' or 'JET' are. #}
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_66760a847bc94cc89cb1ce19f5f01018
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_5b8311b6127d4b18bec632fe48483579
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_917bee1b44314461b1c3b7f6af3b6aa4
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Allowed - One But Not All Product Types Inherited From Companies
+                    meta:
+                      id: req_270ff94e164a4322a3002430168e1f2f
+                      created: 1740596384918
+                      modified: 1746563747447
+                      isPrivate: false
+                      sortKey: -1740596383738
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_edit",
+                            "requestType": "evaluate",
+                            "locations": ["DVD"], 
+                            "productTypes": ["GAS", "KER"], {# One product type (GAS) is inherited from a company, the other (KER) is unknown #}
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_72a2f44d2f7744f1b5f297897416628a
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_ed36f7e4e5e14b8ba01ba6f016289113
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_efdd118fffcf42a2975cdf5167cc00a8
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+              - name: Location
+                meta:
+                  id: fld_4eecb99c5cc94259bd3c22abd482cf3c
+                  created: 1740596384919
+                  modified: 1740596384919
+                  sortKey: -1740596383737
+                children:
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Denied - Location Not Inherited From Companies
+                    meta:
+                      id: req_94974231e0354fc491082616d7cf48dc
+                      created: 1740596384920
+                      modified: 1746563753657
+                      isPrivate: false
+                      sortKey: -1740596383736
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_edit",
+                            "requestType": "evaluate",
+                            "locations": ["ATL"], {# This location is not one of any inherited companies locations, but 'DVD' is. #}
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_d0dd1aa055334c3f8de34a17623d744d
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_733aa95730d54059bae06d94cf7d56f6
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_692102cf89ce400bb6fea8c7e979c548
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+                  - url: https://localhost:39393/api/v2/authz/is
+                    name: Allowed - One But Not All Locations Inherited From Companies
+                    meta:
+                      id: req_d0184360421c424bb0b77fd6269283f6
+                      created: 1740596384921
+                      modified: 1746563758125
+                      isPrivate: false
+                      sortKey: -1740596383735
+                    method: POST
+                    body:
+                      mimeType: application/json
+                      text: >-
+                        {
+                          "identity_context": {
+                            "identity": "bob@transport4.com",
+                            "type": "IDENTITY_TYPE_NONE"
+                          },
+                          "policy_context": {
+                            "decisions": [
+                              "allow"
+                            ],
+                            "path": "rebac.check"
+                          },
+                          "policy_instance": {
+                            "instance_label": "policy-poc",
+                            "name": "policy-poc"
+                          },
+                          "resource_context": {
+                            "principal": "bob@transport4.com",
+                            "action": "nomination_edit",
+                            "requestType": "evaluate",
+                            "locations": ["DVD", "ATL"], {# One location (DVD) is inherited from a subscriber, the other (ATL) is unknown #}
+                            "productTypes": ["GAS"],
+                            "companies": ["EXN", "CHV", "EXN"],
+                            "companyParties": ["shipper", "supCon", "tankage"],
+                            "subscribers": ["CPL"]
+                          }
+                        }
+                    headers:
+                      - name: Authorization
+                        value: basic <fill in>
+                        id: pair_e54a46c5fcc64fa994059bd73c1f62ac
+                      - name: aserto-tenant-id
+                        value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                        id: pair_b79e53028e5143da8a1f5008d13d927c
+                      - name: Content-Type
+                        value: application/json
+                        id: pair_7626cef08aea43409242cb483c983d2c
+                    settings:
+                      renderRequestBody: true
+                      encodeUrl: true
+                      followRedirects: global
+                      cookies:
+                        send: true
+                        store: true
+                      rebuildPath: true
+          - name: SQL Generation Requests
+            meta:
+              id: fld_3e9f8b47256d4a2b9e9490b07d8d60c7
+              created: 1740596384925
+              modified: 1746564016845
+              sortKey: -1746564008390
+            children:
+              - url: https://localhost:39393/api/v2/authz/compile
+                name: Allowed - Nomination Search (Bob)
+                meta:
+                  id: req_154d180157e840f18565fde4748b5cd3
+                  created: 1740596384926
+                  modified: 1746564027913
+                  isPrivate: false
+                  sortKey: -1740596383733
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                      "identity_context": {
+                        "identity": "bob@transport4.com",
+                        "type": "IDENTITY_TYPE_NONE"
+                      },
+                      "options": {
+                        "instrument": false,
+                        "metrics": false,
+                        "trace": "TRACE_LEVEL_UNKNOWN",
+                        "trace_summary": false
+                      },
+                      "policy_context": {
+                        "decisions": [
+                          "allow"
+                        ],
+                        "path": "rebac.check"
+                      },
+                      "policy_instance": {
+                        "instance_label": "policy-poc",
+                        "name": "policy-poc"
+                      },
+                      "query": "data.rebac.check.allow==true",
+                      "resource_context": {
+                        "principal": "bob@transport4.com",
+                        "action": "nomination_view",
+                        "requestType": "generate_query",
+                        "unknown": "nominations",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["EXN", "CHV", "EXN"],
+                        "companyParties": ["shipper", "supCon", "tankage"],
+                        "subscribers": ["CPL"]
+                      },
+                      "unknowns": [
+                        "data.nominations"
+                      ]
+                    }
+                headers:
+                  - name: Authorization
+                    value: basic <fill in>
+                    id: pair_985433db988848ca92ebb1c51404a6c0
+                  - name: aserto-tenant-id
+                    value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                    id: pair_222613d74e9843df9983e780fab9ea82
+                  - name: Content-Type
+                    value: application/json
+                    id: pair_617a60a31387447699d72f08d6cdbc2f
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: https://localhost:39393/api/v2/authz/compile
+                name: Allowed - Ticket Search (Alice)
+                meta:
+                  id: req_f647cac64bf94c3b841cf336c487a3f6
+                  created: 1740596384927
+                  modified: 1746564034869
+                  isPrivate: false
+                  sortKey: -1740596383732
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: |-
+                    {
+                      "identity_context": {
+                        "identity": "bob@transport4.com",
+                        "type": "IDENTITY_TYPE_NONE"
+                      },
+                      "options": {
+                        "instrument": false,
+                        "metrics": false,
+                        "trace": "TRACE_LEVEL_UNKNOWN",
+                        "trace_summary": false
+                      },
+                      "policy_context": {
+                        "decisions": [
+                          "allow"
+                        ],
+                        "path": "rebac.check"
+                      },
+                      "policy_instance": {
+                        "instance_label": "policy-poc",
+                        "name": "policy-poc"
+                      },
+                      "query": "data.rebac.check.allow==true",
+                      "resource_context": {
+                        "principal": "alice@transport4.com",
+                        "action": "ticket_view",
+                        "requestType": "generate_query",
+                        "unknown": "tickets",
+                        "locations": ["DVD"],
+                        "productTypes": ["GAS"],
+                        "companies": ["P66", "EXN", "CHV"],
+                        "companyParties": ["shipper", "subCon", "tankage"],
+                        "subscribers": ["KMO"]
+                      },
+                      "unknowns": [
+                        "data.tickets"
+                      ]
+                    }
+                headers:
+                  - name: Authorization
+                    value: basic <fill in>
+                    id: pair_7619866db38f4416a85e57d730b8de32
+                  - name: aserto-tenant-id
+                    value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                    id: pair_99c79984fe35455fa4919fe0418c58f2
+                  - name: Content-Type
+                    value: application/json
+                    id: pair_ab5b498b8503448482a74e01baededc1
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+              - url: https://localhost:39393/api/v2/authz/compile
+                name: Denied - Nomination Search (Alice)
+                meta:
+                  id: req_6a854ad90fc04ee4a3ed8d7cfedc9713
+                  created: 1740596384929
+                  modified: 1746564038645
+                  isPrivate: false
+                  sortKey: -1740596383731
+                method: POST
+                body:
+                  mimeType: application/json
+                  text: >-
+                    {
+                      "identity_context": {
+                        "identity": "bob@transport4.com",
+                        "type": "IDENTITY_TYPE_NONE"
+                      },
+                      "options": {
+                        "instrument": false,
+                        "metrics": false,
+                        "trace": "TRACE_LEVEL_UNKNOWN",
+                        "trace_summary": false
+                      },
+                      "policy_context": {
+                        "decisions": [
+                          "allow"
+                        ],
+                        "path": "rebac.check"
+                      },
+                      "policy_instance": {
+                        "instance_label": "policy-poc",
+                        "name": "policy-poc"
+                      },
+                      "query": "data.rebac.check.allow==true",
+                      "resource_context": {
+                        "principal": "alice@transport4.com",
+                        "action": "nomination_view", {# Alice does not inherit this action, so no query is generated #}
+                        "requestType": "generate_query",
+                        "unknown": "nominations",
+                        "context": {
+                            "locations": ["DVD"],
+                            "productTypes": ["GAS"],
+                            "companies": ["P66", "EXN", "CHV"],
+                            "companyParties": ["shipper", "subCon", "tankage"],
+                            "subscribers": ["KMO"]
+                        }
+                      },
+                      "unknowns": [
+                        "data.nominations"
+                      ]
+                    }
+                headers:
+                  - name: Authorization
+                    value: basic <fill in>
+                    id: pair_79f7ab4728a849aba589cb7b67f0c6be
+                  - name: aserto-tenant-id
+                    value: 3f98efec-b7f1-11ef-bdf9-00f57d856408
+                    id: pair_02995ef97a8c4b5cad808b9da80aa39f
+                  - name: Content-Type
+                    value: application/json
+                    id: pair_73662058eb38406e91f2070a108457b2
+                settings:
+                  renderRequestBody: true
+                  encodeUrl: true
+                  followRedirects: global
+                  cookies:
+                    send: true
+                    store: true
+                  rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1744749106382
+    modified: 1744749106382
+environments:
+  name: Base Environment
+  meta:
+    id: env_99d30891da4bdcebc63947a8fc17f076de878684
+    created: 1744749105964
+    modified: 1744749105964
+    isPrivate: false

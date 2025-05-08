@@ -1,0 +1,6 @@
+{
+    "topaz_authorizer_host": "https://topaz-authorizer-node-1",
+    "topaz_authorizer_port": "9393",
+    "topaz_directory_host": "https://topaz-control-node",
+    "topaz_directory_port": "9393"
+  }

@@ -1,0 +1,90 @@
+services:
+  authorization-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: authorization-server
+    ports:
+      - "5000:5000"
+      - "5678:5678"
+    depends_on:
+      - topaz-control-node
+    environment:
+      - FLASK_ENV=development
+    networks:
+      - app-net
+
+  topaz-control-node:
+    command:
+      - run
+      - --config-file
+      - /config/config.yaml
+    container_name: topaz-ds
+    environment:
+      - TOPAZ_CERTS_DIR=/certs
+      - TOPAZ_DB_DIR=/db
+    image: ghcr.io/aserto-dev/topaz:latest
+    ports:
+      - 19292:9292 # grpc
+      - 19393:9393 # http rest
+      - 19494:9494 # healthcheck
+      - 19696:9696 # metrics
+    networks:
+      - app-net
+    volumes:
+      - ./control-node/certs:/certs
+      - ./control-node/config:/config
+      - ./control-node/db:/db
+      - ./bundle.tar.gz:/bundles/bundle.tar.gz
+
+  topaz-authorizer-node-1:
+    command:
+      - run
+      - --config-file
+      - /config/config.yaml
+    container_name: topaz-authorizer-node-1
+    environment:
+      - TOPAZ_CERTS_DIR=/certs
+      - TOPAZ_DB_DIR=/db
+    image: ghcr.io/aserto-dev/topaz:latest
+    ports:
+      - 29292:9292 # grpc
+      - 29393:9393 # http rest
+      - 29494:9494 # healthcheck
+      - 29696:9696 # metrics
+    networks:
+      - app-net
+    volumes:
+      - ./authorizer1/certs:/certs
+      - ./authorizer1/config:/config
+      - ./authorizer1/db:/db
+    depends_on:
+      - topaz-control-node
+
+  topaz-authorizer-node-2:
+    command:
+      - run
+      - --config-file
+      - /config/config.yaml
+    container_name: topaz-authorizer-node-2
+    environment:
+      - TOPAZ_CERTS_DIR=/certs
+      - TOPAZ_DB_DIR=/db
+    image: ghcr.io/aserto-dev/topaz:latest
+    ports:
+      - 39292:9292 # grpc
+      - 39393:9393 # http rest
+      - 39494:9494 # healthcheck
+      - 39696:9696 # metrics
+    networks:
+      - app-net
+    volumes:
+      - ./authorizer2/certs:/certs
+      - ./authorizer2/config:/config
+      - ./authorizer2/db:/db
+    depends_on:
+      - topaz-control-node
+
+networks:
+  app-net:
+    driver: bridge
