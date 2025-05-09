@@ -56,7 +56,6 @@ class User:
         )
 
         for identity_relation in identity_relations:
-            print(identity_relation)
             if identity_relation["object_type"] == "identity":
                 self.directory_connection.delete_object(
                     object_type="identity",
