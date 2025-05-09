@@ -19,7 +19,7 @@ services:
       - run
       - --config-file
       - /config/config.yaml
-    container_name: topaz-ds
+    container_name: topaz-control-node
     environment:
       - TOPAZ_CERTS_DIR=/certs
       - TOPAZ_DB_DIR=/db
